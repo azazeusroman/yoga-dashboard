@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ЖИЗНЬ ЙОГА</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
   --sand:#E9A27C;--sand-l:#E7BBA6;--sand-d:#c4784e;
   --mist:#8CB6BC;--mist-l:#b8d4d8;
@@ -19,55 +21,59 @@
   --r:14px;--r2:10px;--r3:20px;
   --gs:rgba(14,137,146,0.2);--go:rgba(233,162,124,0.18);
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);overflow-x:hidden}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 90% 5%,rgba(14,137,146,0.1) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 10% 90%,rgba(233,162,124,0.08) 0%,transparent 60%);z-index:0}
+
 #loadScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 #loadScreen .logo{font-family:'Russo One',sans-serif;font-size:28px;letter-spacing:.2em;color:var(--neon);text-shadow:0 0 20px var(--neon)}
 #loadScreen .sp{width:24px;height:24px;border:2px solid rgba(140,182,188,.2);border-top-color:var(--neon);border-radius:50%;animation:spin .7s linear infinite}
 #loadScreen .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase}
+
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,22,27,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);padding:0 16px;display:flex;align-items:center;height:54px}
-.nav-logo{font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.14em;color:var(--neon);text-shadow:0 0 10px var(--neon);margin-right:auto;white-space:nowrap}
-.nav-tab{height:54px;padding:0 10px;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .25s;white-space:nowrap}
+.nav-logo{font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.16em;color:var(--neon);text-shadow:0 0 10px var(--neon),0 0 22px rgba(0,245,255,0.35);margin-right:auto}
+.nav-tab{height:54px;padding:0 10px;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .25s;white-space:nowrap}
 .nav-tab:hover{color:var(--mist)}.nav-tab.active{color:var(--sand);border-bottom-color:var(--sand)}
 .nav-tab.sess-tab.active{color:var(--neon);border-bottom-color:var(--neon)}
-.nav-tab .tab-label{display:none}
-@media(min-width:600px){.nav-tab{padding:0 16px;font-size:13px;gap:7px}.nav-tab .tab-label{display:inline}}
+.tab-label{display:none}
+@media(min-width:600px){.nav-tab{padding:0 14px;font-size:13px}.tab-label{display:inline}}
+
 .page{display:none;padding:66px 14px 28px;position:relative;z-index:1;max-width:860px;margin:0 auto}
 .page.active{display:block}
+
 .card{background:var(--surf);backdrop-filter:blur(16px);border:1px solid var(--b1);border-radius:var(--r);padding:16px;position:relative;overflow:hidden;transition:border-color .3s}
 .card::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(140,182,188,0.28),transparent)}
 .card:hover{border-color:var(--b2)}
 .card-title{font-family:'Russo One',sans-serif;font-size:13px;letter-spacing:.08em;color:var(--mist-l);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px}
 .ctd{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
 .ctd.sand{background:var(--sand);box-shadow:0 0 8px var(--go)}
+.ctd.mist{background:var(--mist);box-shadow:0 0 8px rgba(140,182,188,0.5)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 @media(max-width:580px){.g2{grid-template-columns:1fr}}
 .full{grid-column:1/-1}.gap{height:11px}
+
+/* RANK */
 .rank-hero{background:linear-gradient(135deg,rgba(13,49,58,0.92),rgba(9,31,38,0.96));border:1px solid var(--b2);border-radius:var(--r3);padding:22px;margin-bottom:11px;position:relative;overflow:hidden}
 .rank-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(14,137,146,0.1),transparent 70%);pointer-events:none}
 .rh-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.rank-orb{width:72px;height:72px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,rgba(140,182,188,0.18),rgba(14,137,146,0.04));border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 0 28px var(--gs);cursor:pointer;transition:all .3s}
+.rank-orb{width:74px;height:74px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,rgba(140,182,188,0.18),rgba(14,137,146,0.04));border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 0 28px var(--gs);cursor:pointer;transition:all .3s}
 .rank-orb:hover{box-shadow:0 0 48px var(--gs);transform:scale(1.04)}
 .rank-info{flex:1;min-width:150px}
 .r-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase}
-.r-name{font-family:'Russo One',sans-serif;font-size:clamp(22px,6vw,38px);letter-spacing:.12em;color:var(--sand);margin:3px 0 7px;text-shadow:0 0 15px var(--go)}
+.r-name{font-family:'Russo One',sans-serif;font-size:clamp(24px,6vw,40px);letter-spacing:.12em;color:var(--sand);margin:3px 0 7px;text-shadow:0 0 15px var(--go)}
 .xp-w{max-width:300px}
 .xp-ll{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-bottom:4px}
 .xp-t{height:5px;background:rgba(7,22,27,.8);border-radius:3px;border:1px solid var(--b1);overflow:hidden}
 .xp-b{height:100%;background:linear-gradient(90deg,var(--sea),var(--neon));border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px var(--neon)}
 .rh-stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--b1)}
 .stat{display:flex;flex-direction:column;gap:2px}
-.sv{font-family:'Russo One',sans-serif;font-size:26px;letter-spacing:.05em}
+.sv{font-family:'Russo One',sans-serif;font-size:28px;letter-spacing:.05em}
 .sv.sea{color:var(--neon);text-shadow:0 0 8px rgba(0,245,255,0.4)}.sv.sand{color:var(--sand)}
 .sl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase}
 .streak-c{display:flex;align-items:center;gap:7px;background:rgba(233,162,124,0.08);border:1px solid var(--b3);border-radius:30px;padding:7px 13px}
-.sn{font-family:'Russo One',sans-serif;font-size:24px;color:var(--sand);text-shadow:0 0 10px var(--go)}
-.wf-card{background:linear-gradient(135deg,rgba(14,137,146,0.09),rgba(13,49,58,0.82));border:1px solid var(--b2);border-radius:var(--r);padding:16px;margin-bottom:11px}
-.wf-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--neon);text-transform:uppercase;margin-bottom:7px}
-.wf-txt{font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.08em;color:var(--neon);line-height:1.3}
-.wf-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.13em;margin-top:7px;text-transform:uppercase}
+.sn{font-family:'Russo One',sans-serif;font-size:26px;color:var(--sand);text-shadow:0 0 10px var(--go)}
+
+/* PATH */
 .path-w{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r2);padding:13px 15px;overflow-x:auto;margin-bottom:11px}
 .path-ll{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;margin-bottom:11px}
 .path-nodes{display:flex;align-items:center;min-width:560px}
@@ -82,6 +88,36 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 @keyframes pulse{0%,100%{box-shadow:0 0 13px var(--go)}50%{box-shadow:0 0 24px rgba(233,162,124,.4)}}
 .pname{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text3);text-align:center;line-height:1.2}
 .pn.current .pname{color:var(--sand)}.pn.done .pname{color:var(--mist)}
+
+/* WEEK FOCUS */
+.wf-card{background:linear-gradient(135deg,rgba(14,137,146,0.09),rgba(13,49,58,0.82));border:1px solid var(--b2);border-radius:var(--r);padding:16px;margin-bottom:11px}
+.wf-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--neon);text-transform:uppercase;margin-bottom:7px}
+.wf-txt{font-family:'Russo One',sans-serif;font-size:19px;letter-spacing:.08em;color:var(--neon);line-height:1.3}
+.wf-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.13em;margin-top:7px;text-transform:uppercase}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 16px;border-radius:var(--r2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .25s;border:none;outline:none}
+.btn-p{background:linear-gradient(135deg,var(--sea),var(--sea-d));color:#fff;box-shadow:0 4px 14px var(--gs)}
+.btn-p:hover{box-shadow:0 6px 22px rgba(14,137,146,.4);transform:translateY(-1px)}
+.btn-s{background:linear-gradient(135deg,var(--sand),var(--sand-d));color:#fff;box-shadow:0 4px 14px var(--go)}
+.btn-s:hover{box-shadow:0 6px 22px rgba(233,162,124,.35);transform:translateY(-1px)}
+.btn-g{background:var(--glass2);color:var(--mist);border:1px solid var(--b1)}
+.btn-g:hover{background:var(--surf2);border-color:var(--b2)}
+.btn-sm{padding:7px 12px;font-size:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+
+.btn-create-content{width:100%;margin-bottom:10px;padding:16px 20px;background:linear-gradient(135deg,rgba(0,245,255,0.12),rgba(14,137,146,0.08));border:1.5px solid var(--neon);border-radius:var(--r);color:var(--neon);font-family:'Russo One',sans-serif;font-size:19px;letter-spacing:.18em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s;box-shadow:0 0 20px rgba(0,245,255,0.1)}
+.btn-create-content:hover{box-shadow:0 0 30px rgba(0,245,255,0.25);transform:translateY(-1px)}
+.btn-session{width:100%;margin-bottom:12px;padding:16px 20px;background:linear-gradient(135deg,rgba(233,162,124,0.12),rgba(196,120,78,0.08));border:1.5px solid var(--sand);border-radius:var(--r);color:var(--sand);font-family:'Russo One',sans-serif;font-size:19px;letter-spacing:.18em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s;box-shadow:0 0 20px rgba(233,162,124,0.1)}
+.btn-session:hover{box-shadow:0 0 30px rgba(233,162,124,0.25);transform:translateY(-1px)}
+
+/* INPUT */
+.inp{width:100%;background:rgba(7,22,27,.72);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--sea)}
+.inp::placeholder{color:var(--text3);font-style:italic}
+textarea.inp{resize:none;line-height:1.6}
+
+/* TODAY */
 .today-focus{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--neon);margin-bottom:13px;line-height:1.4}
 .task-list{display:flex;flex-direction:column;gap:5px}
 .task{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:rgba(7,22,27,.62);border:1px solid var(--b1);border-radius:var(--r2);cursor:pointer;transition:all .2s;user-select:none}
@@ -94,25 +130,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .t-tag.self{background:rgba(233,162,124,.1);color:var(--sand);border:1px solid var(--b3)}
 .t-tag.pub{background:rgba(140,182,188,.1);color:var(--mist-l);border:1px solid rgba(140,182,188,.2)}
 .t-xp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sea);flex-shrink:0;margin-top:2px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 16px;border-radius:var(--r2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .25s;border:none;outline:none}
-.btn-p{background:linear-gradient(135deg,var(--sea),var(--sea-d));color:#fff;box-shadow:0 4px 14px var(--gs)}
-.btn-p:hover{box-shadow:0 6px 22px rgba(14,137,146,.4);transform:translateY(-1px)}
-.btn-s{background:linear-gradient(135deg,var(--sand),var(--sand-d));color:#fff;box-shadow:0 4px 14px var(--go)}
-.btn-s:hover{box-shadow:0 6px 22px rgba(233,162,124,.35);transform:translateY(-1px)}
-.btn-g{background:var(--glass2);color:var(--mist);border:1px solid var(--b1)}
-.btn-g:hover{background:var(--surf2);border-color:var(--b2)}
-.btn-sm{padding:7px 12px;font-size:12px}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
-.btn-create-content{width:100%;margin-bottom:11px;padding:16px 20px;background:linear-gradient(135deg,rgba(0,245,255,0.12),rgba(14,137,146,0.08));border:1.5px solid var(--neon);border-radius:var(--r);color:var(--neon);font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.16em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s;box-shadow:0 0 20px rgba(0,245,255,0.1)}
-.btn-create-content:hover{box-shadow:0 0 30px rgba(0,245,255,0.25);transform:translateY(-1px)}
-.inp{width:100%;background:rgba(7,22,27,.72);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
-.inp:focus{border-color:var(--sea)}
-.inp::placeholder{color:var(--text3);font-style:italic}
-textarea.inp{resize:none;line-height:1.6}
-.m-big{font-family:'Russo One',sans-serif;font-size:38px;letter-spacing:.08em;color:#00f5ff;text-shadow:0 0 8px #00f5ff,0 0 35px rgba(0,245,255,0.55)}
+
+/* MONEY */
+.m-big{font-family:'Russo One',sans-serif;font-size:40px;letter-spacing:.08em;color:var(--neon);text-shadow:0 0 8px var(--neon),0 0 35px rgba(0,245,255,0.55)}
 .m-trk{height:9px;background:rgba(7,22,27,.8);border-radius:5px;border:1px solid var(--b1);overflow:hidden;margin:9px 0 5px}
 .m-fill{height:100%;background:linear-gradient(90deg,var(--sea-d),var(--neon));border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px var(--neon)}
 .m-marks{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3)}
+
+/* WEEK */
 .wk-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .wd{aspect-ratio:.88;border-radius:var(--r2);border:1px solid var(--b1);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .wd.done{border-color:rgba(14,137,146,.38);background:rgba(14,137,146,.07)}
@@ -121,12 +146,16 @@ textarea.inp{resize:none;line-height:1.6}
 .wd-n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)}
 .wd.done .wd-n{color:var(--sea)}.wd.today .wd-n{color:var(--sand)}
 .wd-i{font-size:12px}.wd-d{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text3);text-transform:uppercase}
+
+/* METRICS */
 .met-g{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .met{background:rgba(7,22,27,.6);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 12px}
 .mv{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700}
 .mv.sea{color:var(--sea)}.mv.sand{color:var(--sand)}
 .ml{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.13em;color:var(--text3);text-transform:uppercase;margin-top:2px}
 .mi{width:52px;background:var(--bg2);border:1px solid var(--b1);border-radius:6px;padding:3px 6px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-top:4px}
+
+/* REFLECTION */
 .re-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:300px;overflow-y:auto}
 .re{background:rgba(7,22,27,.72);border:1px solid var(--b1);border-left:2px solid var(--sea);border-radius:var(--r2);padding:12px}
 .re-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px}
@@ -140,10 +169,14 @@ textarea.inp{resize:none;line-height:1.6}
 .re-ins-lb{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--sand);letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px}
 .re-goto{margin-top:8px;width:100%;padding:8px;background:rgba(233,162,124,.1);border:1px solid var(--b3);border-radius:8px;color:var(--sand);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
 .re-goto:hover{background:rgba(233,162,124,.18)}
+
+/* BADGES */
 .bdg-w{display:flex;flex-wrap:wrap;gap:5px}
 .bdg{padding:4px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:9px;display:flex;align-items:center;gap:3px}
 .bdg.locked{background:var(--bg3);border:1px solid var(--b1);color:var(--text3);opacity:.32}
 .bdg.unlocked{background:rgba(233,162,124,.1);border:1px solid var(--b3);color:var(--sand)}
+
+/* CONTENT */
 .shutter-wrap{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
 .shutter-toggle{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
 .shutter-body{padding:0 14px 14px;display:none}
@@ -168,32 +201,21 @@ textarea.inp{resize:none;line-height:1.6}
 .ci-in{font-size:12px;color:var(--text3);margin-bottom:5px;font-style:italic}
 .ci-ou{font-size:13px;color:var(--text2);line-height:1.5}
 .ci-cp{font-size:10px;padding:3px 8px;background:var(--glass2);border:1px solid var(--b1);border-radius:20px;color:var(--mist);cursor:pointer;font-family:'JetBrains Mono',monospace;margin-top:7px;display:inline-block}
-.sess-hist-item{background:rgba(7,22,27,.62);border:1px solid var(--b1);border-radius:var(--r2);margin-bottom:7px;overflow:hidden;transition:border-color .2s}
-.sess-hist-item:hover{border-color:var(--b2)}
-.sess-hist-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;cursor:pointer}
-.sess-hist-dt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3)}
-.sess-hist-toggle{font-size:11px;color:var(--text3)}
-.sess-hist-preview{font-size:12px;color:var(--text2);padding:0 13px 10px;font-style:italic}
-.sess-hist-detail{padding:10px 13px;border-top:1px solid var(--b1);display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto}
-.sess-hist-msg{font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px}
-.sess-hist-msg.user{background:rgba(233,162,124,0.07);border:1px solid var(--b3);color:var(--text2)}
-.sess-hist-msg.ai{background:rgba(14,137,146,0.06);border:1px solid rgba(14,137,146,.15);color:var(--text2)}
-/* SESS END */
-.sess-hero{background:linear-gradient(135deg,rgba(0,245,255,0.06),rgba(13,49,58,0.9));border:1px solid var(--b2);border-radius:var(--r3);padding:18px;margin-bottom:14px}
-.sess-hero-title{font-family:'Russo One',sans-serif;font-size:22px;letter-spacing:.12em;color:var(--neon);text-shadow:0 0 12px rgba(0,245,255,0.4);margin-bottom:4px}
+
+/* SESSION */
+.sess-hero{background:linear-gradient(135deg,rgba(14,137,146,0.09),rgba(13,49,58,0.82));border:1px solid var(--b2);border-radius:var(--r3);padding:18px;margin-bottom:14px}
+.sess-hero-title{font-family:'Russo One',sans-serif;font-size:22px;letter-spacing:.12em;color:var(--neon);margin-bottom:4px;text-shadow:0 0 10px rgba(0,245,255,0.35)}
 .sess-hero-sub{font-size:13px;color:var(--text3);line-height:1.5}
-.sess-start-btn{width:100%;padding:16px;background:linear-gradient(135deg,rgba(0,245,255,0.12),rgba(14,137,146,0.08));border:1.5px solid var(--neon);border-radius:var(--r);color:var(--neon);font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.14em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;box-shadow:0 0 20px rgba(0,245,255,0.1);margin-bottom:14px}
-.sess-start-btn:hover{box-shadow:0 0 32px rgba(0,245,255,0.25);transform:translateY(-1px)}
+.sess-start-btn{width:100%;padding:16px;background:linear-gradient(135deg,rgba(0,245,255,0.12),rgba(14,137,146,0.08));border:1.5px solid var(--neon);border-radius:var(--r);color:var(--neon);font-family:'Russo One',sans-serif;font-size:18px;letter-spacing:.14em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;box-shadow:0 0 18px rgba(0,245,255,0.1);margin-bottom:14px}
+.sess-start-btn:hover{box-shadow:0 0 28px rgba(0,245,255,0.22);transform:translateY(-1px)}
 .sess-chat{background:var(--surf);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden;display:none}
 .sess-chat.active{display:block}
 .sess-msgs{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:50vh;overflow-y:auto}
 .msg{max-width:88%;padding:11px 14px;border-radius:14px;font-size:14px;line-height:1.6}
 .msg.ai{background:rgba(14,137,146,0.1);border:1px solid rgba(14,137,146,0.2);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
 .msg.user{background:rgba(233,162,124,0.1);border:1px solid var(--b3);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px;position:relative}
-.msg-copy{position:absolute;bottom:6px;right:8px;font-size:10px;padding:2px 7px;background:var(--glass2);border:1px solid var(--b1);border-radius:20px;color:var(--text3);cursor:pointer;font-family:'JetBrains Mono',monospace;opacity:0;transition:opacity .2s}
-.msg.user:hover .msg-copy{opacity:1}
-.msg.user .msg-copy{opacity:.4}
 .msg-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;opacity:.5}
+.msg-copy{position:absolute;bottom:6px;right:8px;font-size:10px;padding:2px 7px;background:rgba(233,162,124,0.1);border:1px solid var(--b3);border-radius:20px;color:var(--sand);cursor:pointer;font-family:'JetBrains Mono',monospace;opacity:.5}
 .sess-input-area{border-top:1px solid var(--b1);padding:12px 14px;background:rgba(7,22,27,0.5)}
 .sess-input-row{display:flex;gap:8px;align-items:flex-end}
 .sess-ta{flex:1;background:rgba(7,22,27,.72);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none;line-height:1.6;height:90px;max-height:140px;overflow-y:auto;transition:border-color .2s}
@@ -213,6 +235,16 @@ textarea.inp{resize:none;line-height:1.6}
 .idea-item-hint{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-top:3px}
 .sess-reset-btn{width:100%;padding:10px;background:var(--glass2);border:1px solid var(--b1);border-radius:var(--r2);color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:10px;transition:all .2s}
 .sess-reset-btn:hover{border-color:var(--b2);color:var(--text2)}
+.sess-hist-item{background:rgba(7,22,27,.62);border:1px solid var(--b1);border-radius:var(--r2);margin-bottom:7px;overflow:hidden}
+.sess-hist-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;cursor:pointer}
+.sess-hist-dt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3)}
+.sess-hist-toggle{font-size:11px;color:var(--text3)}
+.sess-hist-preview{font-size:12px;color:var(--text2);padding:0 13px 10px;font-style:italic}
+.sess-hist-detail{padding:10px 13px;border-top:1px solid var(--b1);display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto}
+.sess-hist-msg{font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px}
+.sess-hist-msg.user{background:rgba(233,162,124,0.07);border:1px solid var(--b3);color:var(--text2)}
+.sess-hist-msg.ai{background:rgba(14,137,146,0.06);border:1px solid rgba(14,137,146,.15);color:var(--text2)}
+
 /* SETTINGS */
 .page-title{font-family:'Russo One',sans-serif;font-size:28px;letter-spacing:.12em;color:var(--sand);text-shadow:0 0 12px var(--go);margin-bottom:3px}
 .page-sub{font-size:13px;color:var(--text3);margin-bottom:16px}
@@ -221,6 +253,7 @@ textarea.inp{resize:none;line-height:1.6}
 .up-z:hover{border-color:var(--sea)}
 .up-tx{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.13em;text-transform:uppercase}
 .gcal-a{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.24);border-radius:20px;color:#6ea8fe;font-family:'JetBrains Mono',monospace;font-size:10px;text-decoration:none}
+
 .sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(140,182,188,.2);border-top-color:var(--mist);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .toast{position:fixed;bottom:18px;right:14px;z-index:9999;background:rgba(13,49,58,.96);backdrop-filter:blur(20px);border:1px solid var(--b2);border-radius:var(--r);padding:13px 17px;max-width:280px;transform:translateY(120%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 30px rgba(0,0,0,.5)}
@@ -231,14 +264,18 @@ textarea.inp{resize:none;line-height:1.6}
 </style>
 </head>
 <body>
-<div id="loadScreen"><div class="logo">⚡ ЖИЗНЬ ЙОГА</div><div class="sp"></div><div class="lbl">Загружаю прогресс...</div></div>
+<div id="loadScreen">
+  <div class="logo">⚡ ЖИЗНЬ ЙОГА</div>
+  <div class="sp"></div>
+  <div class="lbl">Загружаю прогресс...</div>
+</div>
 
 <nav class="nav">
   <div class="nav-logo">⚡ ЖИЗНЬ ЙОГА</div>
-  <div class="nav-tab active" id="tab-dashboard" onclick="gp('dashboard')">🗡️<span class="tab-label">Путь</span></div>
-  <div class="nav-tab" id="tab-content" onclick="gp('content')">✍️<span class="tab-label">Контент</span></div>
-  <div class="nav-tab sess-tab" id="tab-session" onclick="gp('session')">🎙️<span class="tab-label">Разбор</span></div>
-  <div class="nav-tab" id="tab-settings" onclick="gp('settings')">⚙️<span class="tab-label">Настройки</span></div>
+  <div class="nav-tab active" id="tab-dashboard" onclick="gp('dashboard')">🗡️<span class="tab-label"> Путь</span></div>
+  <div class="nav-tab" id="tab-content" onclick="gp('content')">✍️<span class="tab-label"> Контент</span></div>
+  <div class="nav-tab sess-tab" id="tab-session" onclick="gp('session')">🎙️<span class="tab-label"> Разбор</span></div>
+  <div class="nav-tab" id="tab-settings" onclick="gp('settings')">⚙️<span class="tab-label"> Настройки</span></div>
 </nav>
 
 <!-- DASHBOARD -->
@@ -268,7 +305,7 @@ textarea.inp{resize:none;line-height:1.6}
     <div class="wf-sub">Неделя 1 из 14 · KPI: 6 диагностических созвонов</div>
   </div>
   <button class="btn-create-content" onclick="gp('content')"><span style="font-size:20px">✍️</span><span>СОЗДАТЬ КОНТЕНТ</span><span style="font-size:14px;opacity:.7">→</span></button>
-  <button class="btn-create-content" onclick="gp('session')" style="border-color:var(--sand);color:var(--sand);background:linear-gradient(135deg,rgba(233,162,124,0.12),rgba(196,120,78,0.08));box-shadow:0 0 20px rgba(233,162,124,0.1);margin-bottom:11px"><span style="font-size:20px">🎙️</span><span>СЕССИЯ РАЗБОРА</span><span style="font-size:14px;opacity:.7">→</span></button>
+  <button class="btn-session" onclick="gp('session')"><span style="font-size:20px">🎙️</span><span>СЕССИЯ РАЗБОРА</span><span style="font-size:14px;opacity:.7">→</span></button>
   <div class="g2">
     <div class="card full">
       <div class="card-title"><div class="ctd"></div>Задачи на сегодня<span style="margin-left:auto;font-size:10px" id="tdDt"></span></div>
@@ -356,15 +393,12 @@ textarea.inp{resize:none;line-height:1.6}
     <div class="sess-hero-title">🎙️ Сессия разбора</div>
     <div class="sess-hero-sub">Наговори что у тебя в голове — Клод задаст вопросы и вытащит из хаоса готовые идеи контента.</div>
   </div>
-  <button class="sess-start-btn" id="sessStartBtn" onclick="sessStart()">
-    <span style="font-size:22px">🎙️</span>
-    <span>НАЧАТЬ СЕССИЮ</span>
-  </button>
+  <button class="sess-start-btn" id="sessStartBtn" onclick="sessStart()"><span style="font-size:22px">🎙️</span><span>НАЧАТЬ СЕССИЮ</span></button>
   <div class="sess-chat" id="sessChat">
     <div class="sess-msgs" id="sessMsgs"></div>
     <div class="sess-input-area">
       <div class="sess-input-row">
-        <textarea class="sess-ta" id="sessInput" rows="1" placeholder="Пиши или говори..." onkeydown="sessKey(event)"></textarea>
+        <textarea class="sess-ta" id="sessInput" placeholder="Пиши или говори..." onkeydown="sessKey(event)"></textarea>
         <button class="sess-mic-btn" id="sessMic" onclick="toggleMic()">🎤</button>
         <button class="sess-send-btn" id="sessSend" onclick="sessSendMsg()">↑</button>
       </div>
@@ -377,7 +411,7 @@ textarea.inp{resize:none;line-height:1.6}
   <button class="sess-reset-btn" id="sessResetBtn" style="display:none" onclick="sessReset()">↺ Новая сессия</button>
   <div class="gap"></div>
   <div class="card">
-    <div class="card-title"><div class="ctd"></div>История сессий</div>
+    <div class="card-title"><div class="ctd mist"></div>История сессий</div>
     <div id="sessHistoryList"></div>
   </div>
 </div>
@@ -399,8 +433,8 @@ textarea.inp{resize:none;line-height:1.6}
   <div class="gap"></div>
   <div class="card">
     <div class="card-title"><div class="ctd"></div>Google Apps Script URL</div>
-    <input type="text" class="inp" id="suInp">
-    <button class="btn btn-p btn-sm" style="margin-top:7px" onclick="saveSU()">Сохранить</button>
+    <div class="s-lbl">URL зашит в код — не нужно менять</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sea);padding:8px;background:var(--bg2);border-radius:var(--r2);word-break:break-all" id="suDisplay"></div>
   </div>
   <div class="gap"></div>
   <div class="card">
@@ -413,12 +447,12 @@ textarea.inp{resize:none;line-height:1.6}
 <div class="toast" id="toast"><div class="tt" id="tT"></div><div class="tb" id="tB"></div><div class="tx" id="tX"></div></div>
 
 <script>
-const PROXY = 'https://magenta-capybara-179f49.netlify.app/.netlify/functions/claude';
-const STORAGE_KEY = 'roman_yoga_v1';
-const SU_DEF = 'https://script.google.com/macros/s/AKfycbyr5GPyFYIIKprsm77ByMuHDZzF2Ngbu0x3DQJNhLCaF1r8aGoVwlKV6lBGdQY4PTr3/exec';
+const PROXY='https://magenta-capybara-179f49.netlify.app/.netlify/functions/claude';
+const SU='https://script.google.com/macros/s/AKfycbxZ81FybvTBoBB7d0LfUbSnsfcBMThk6TVxLBMtkd7cOtuLt1PHNVyk_XtDfe2tFQCH/exec';
+const STORAGE_KEY='roman_yoga_v1';
 
 const RANKS=[{n:'Скиталец',i:'🚶',xr:0,xn:100},{n:'Пехотинец',i:'🛡️',xr:100,xn:250},{n:'Воин',i:'⚔️',xr:250,xn:500},{n:'Искатель',i:'🔍',xr:500,xn:800},{n:'Самурай',i:'🗡️',xr:800,xn:1200},{n:'Знаменосец',i:'🚩',xr:1200,xn:1800},{n:'Сэнсэй',i:'🧘',xr:1800,xn:2600},{n:'Полководец',i:'👑',xr:2600,xn:3600},{n:'Легенда',i:'🌟',xr:3600,xn:null}];
-const PLAN=[{d:1,l:'Первый публичный оффер',f:'День 1 — Первый оффер с ценой в истории канала',t:[{tx:'Опубликовать пост-оффер мини-группы с ценой 12 000 ₽ в TG',xp:30,tp:'pub'},{tx:'Выложить готовый ролик в Instagram + TikTok',xp:20,tp:'self'},{tx:'Попросить ИИ черновик подписи под ролик с CTA',xp:10,tp:'ai'},{tx:'Ответить на все входящие в течение дня',xp:15,tp:'self'}]},{d:2,l:'Личные сообщения тёплым',f:'День 2 — Пишем тем кто уже интересовался',t:[{tx:'Написать лично троим кто спрашивал про группу',xp:40,tp:'self'},{tx:'Запросить у ИИ персональные тексты сообщений',xp:10,tp:'ai'},{tx:'Выложить 2-й готовый ролик с CTA',xp:20,tp:'pub'}]},{d:3,l:'Оффер 32 000 ₽',f:'День 3 — Публикуем оффер на инд. ведение',t:[{tx:'Опубликовать оффер на инд. ведение — 32 000 ₽',xp:30,tp:'pub'},{tx:'Провести 1–2 созвона: диагностика → инсайт → предложение',xp:50,tp:'self'},{tx:'Пост про связь тела и состояния (черновик у ИИ)',xp:15,tp:'ai'}]},{d:4,l:'Контент + кейс',f:'День 4 — Кейс клиента и ролик',t:[{tx:'Выложить 3-й готовый ролик',xp:20,tp:'pub'},{tx:'Написать пост с кейсом анонимно (черновик у ИИ)',xp:25,tp:'ai'},{tx:'Назначить созвоны всем кто написал',xp:30,tp:'self'}]},{d:5,l:'Открытая практика ON YOGA',f:'День 5 — Пятница, открытая практика 13:00 МСК',t:[{tx:'Провести открытую практику в ON YOGA 13:00 МСК',xp:60,tp:'self'},{tx:'Снять короткое видео после практики',xp:20,tp:'self'},{tx:'Анонс практики в TG и Instagram-сторис',xp:15,tp:'pub'}]},{d:6,l:'Анализ недели',f:'День 6 — Смотрим что сработало',t:[{tx:'Ответить на накопившиеся сообщения',xp:15,tp:'self'},{tx:'Скинуть ИИ статистику — получить выводы',xp:10,tp:'ai'}]},{d:7,l:'Выходной 🌿',f:'День 7 — Полный выходной. Заряд.',t:[{tx:'Отдохнуть. Это тоже часть стратегии.',xp:25,tp:'self'}]},{d:8,l:'Итоги нед.1 + ЛМ',f:'День 8 — Честный итог и лид-магнит',t:[{tx:'Опубликовать пост-итог недели 1 с реальными цифрами',xp:30,tp:'pub'},{tx:'Настроить TG-бот: УТЕЧКИ → PDF',xp:40,tp:'self'},{tx:'Текст PDF лид-магнита — делает ИИ',xp:10,tp:'ai'},{tx:'Анонс лид-магнита в TG и Instagram',xp:20,tp:'pub'}]},{d:9,l:'Рилс под ЛМ',f:'День 9 — Прогревочный ролик',t:[{tx:'Снять рилс под ЛМ «5 утечек энергии»',xp:35,tp:'self'},{tx:'Сценарий рилса с хуком — у ИИ',xp:10,tp:'ai'},{tx:'Провести 2–3 созвона',xp:60,tp:'self'}]},{d:10,l:'Пост «нет времени»',f:'День 10 — Закрываем главное возражение',t:[{tx:'Пост «10 минут работают лучше часа раз в неделю»',xp:25,tp:'pub'},{tx:'Черновик поста — у ИИ',xp:10,tp:'ai'},{tx:'Выложить ролик #4',xp:20,tp:'pub'}]},{d:11,l:'Переписка по ЛМ',f:'День 11 — Конвертируем скачавших',t:[{tx:'Написать лично всем кто скачал ЛМ',xp:45,tp:'self'},{tx:'Шаблоны сообщений — у ИИ',xp:10,tp:'ai'},{tx:'Провести созвоны',xp:60,tp:'self'}]},{d:12,l:'Практика + дефицит',f:'День 12 — Осталось 1 место',t:[{tx:'Открытая практика ON YOGA',xp:60,tp:'self'},{tx:'Пост «Осталось 1 место в мини-группе»',xp:25,tp:'pub'},{tx:'Контент-пост про нервную систему',xp:20,tp:'pub'}]},{d:13,l:'Итог двух недель',f:'День 13 — Честные цифры',t:[{tx:'Честный пост-итог 2 недель с цифрами',xp:35,tp:'pub'},{tx:'Черновик итогового поста — у ИИ',xp:10,tp:'ai'},{tx:'Ответить на все накопившиеся сообщения',xp:15,tp:'self'}]},{d:14,l:'Выходной 🌿',f:'День 14 — Ты прошёл путь.',t:[{tx:'Полный выходной. Ты прошёл 2 недели.',xp:50,tp:'self'}]}];
+const PLAN=[{d:1,l:'Первый публичный оффер',f:'День 1 — Первый оффер с ценой в истории канала',t:[{tx:'Опубликовать пост-оффер мини-группы с ценой 12 000 ₽ в TG',xp:30,tp:'pub'},{tx:'Выложить готовый ролик в Instagram + TikTok',xp:20,tp:'self'},{tx:'Попросить ИИ черновик подписи под ролик с CTA',xp:10,tp:'ai'},{tx:'Ответить на все входящие в течение дня',xp:15,tp:'self'}]},{d:2,l:'Личные сообщения тёплым',f:'День 2 — Пишем тем кто уже интересовался',t:[{tx:'Написать лично троим кто спрашивал про группу',xp:40,tp:'self'},{tx:'Запросить у ИИ персональные тексты сообщений',xp:10,tp:'ai'},{tx:'Выложить 2-й готовый ролик с CTA',xp:20,tp:'pub'}]},{d:3,l:'Оффер 32 000 ₽',f:'День 3 — Публикуем оффер на инд. ведение',t:[{tx:'Опубликовать оффер на инд. ведение — 32 000 ₽',xp:30,tp:'pub'},{tx:'Провести 1–2 созвона',xp:50,tp:'self'},{tx:'Пост про связь тела и состояния (ИИ)',xp:15,tp:'ai'}]},{d:4,l:'Контент + кейс',f:'День 4 — Кейс клиента и ролик',t:[{tx:'Выложить 3-й готовый ролик',xp:20,tp:'pub'},{tx:'Пост с кейсом анонимно (ИИ)',xp:25,tp:'ai'},{tx:'Назначить созвоны всем кто написал',xp:30,tp:'self'}]},{d:5,l:'Открытая практика ON YOGA',f:'День 5 — Пятница, открытая практика 13:00 МСК',t:[{tx:'Провести открытую практику в ON YOGA 13:00 МСК',xp:60,tp:'self'},{tx:'Снять короткое видео после практики',xp:20,tp:'self'},{tx:'Анонс практики в TG и Instagram-сторис',xp:15,tp:'pub'}]},{d:6,l:'Анализ недели',f:'День 6 — Смотрим что сработало',t:[{tx:'Ответить на накопившиеся сообщения',xp:15,tp:'self'},{tx:'Скинуть ИИ статистику — получить выводы',xp:10,tp:'ai'}]},{d:7,l:'Выходной 🌿',f:'День 7 — Полный выходной. Заряд.',t:[{tx:'Отдохнуть. Это тоже часть стратегии.',xp:25,tp:'self'}]},{d:8,l:'Итоги нед.1 + ЛМ',f:'День 8 — Честный итог и лид-магнит',t:[{tx:'Пост-итог недели 1 с реальными цифрами',xp:30,tp:'pub'},{tx:'Настроить TG-бот: УТЕЧКИ → PDF',xp:40,tp:'self'},{tx:'Текст PDF лид-магнита — делает ИИ',xp:10,tp:'ai'},{tx:'Анонс лид-магнита',xp:20,tp:'pub'}]},{d:9,l:'Рилс под ЛМ',f:'День 9 — Прогревочный ролик',t:[{tx:'Снять рилс под ЛМ «5 утечек энергии»',xp:35,tp:'self'},{tx:'Сценарий рилса — у ИИ',xp:10,tp:'ai'},{tx:'Провести 2–3 созвона',xp:60,tp:'self'}]},{d:10,l:'Пост «нет времени»',f:'День 10 — Закрываем главное возражение',t:[{tx:'Пост «10 минут работают лучше часа»',xp:25,tp:'pub'},{tx:'Черновик поста — у ИИ',xp:10,tp:'ai'},{tx:'Выложить ролик #4',xp:20,tp:'pub'}]},{d:11,l:'Переписка по ЛМ',f:'День 11 — Конвертируем скачавших',t:[{tx:'Написать лично всем кто скачал ЛМ',xp:45,tp:'self'},{tx:'Шаблоны сообщений — у ИИ',xp:10,tp:'ai'},{tx:'Провести созвоны',xp:60,tp:'self'}]},{d:12,l:'Практика + дефицит',f:'День 12 — Осталось 1 место',t:[{tx:'Открытая практика ON YOGA',xp:60,tp:'self'},{tx:'Пост «Осталось 1 место»',xp:25,tp:'pub'},{tx:'Контент-пост про нервную систему',xp:20,tp:'pub'}]},{d:13,l:'Итог двух недель',f:'День 13 — Честные цифры',t:[{tx:'Пост-итог 2 недель с цифрами',xp:35,tp:'pub'},{tx:'Черновик итогового поста — у ИИ',xp:10,tp:'ai'},{tx:'Ответить на сообщения',xp:15,tp:'self'}]},{d:14,l:'Выходной 🌿',f:'День 14 — Ты прошёл путь.',t:[{tx:'Полный выходной. Ты прошёл 2 недели.',xp:50,tp:'self'}]}];
 const MODES=[{id:'razgon',i:'🚀',n:'Разгон',d:'Суть + провокационный вопрос'},{id:'ugly',i:'🔺',n:'Углы',d:'7 углов одной идеи'},{id:'content',i:'✍️',n:'Контент',d:'Пост / Рилс / YouTube'},{id:'protivokhod',i:'⚡',n:'Противоход',d:'Перевернуть мысль'},{id:'distil',i:'💎',n:'Дистилляция',d:'Один сильный хук'},{id:'svyazka',i:'🔗',n:'Связка',d:'Собрать несколько мыслей'}];
 const BADGES=[{id:'first_post',i:'📢',n:'Первый оффер',d:'Опубликовал оффер с ценой'},{id:'first_call',i:'📞',n:'Первый созвон',d:'Провёл диагностический созвон'},{id:'streak3',i:'🔥',n:'Огонь 3',d:'3 дня подряд'},{id:'streak7',i:'⚡',n:'Молния 7',d:'7 дней подряд'},{id:'week1',i:'🛡️',n:'Неделя 1',d:'Закрыл 7 дней'},{id:'week2',i:'⚔️',n:'Две недели',d:'Закрыл 14 дней'},{id:'money100',i:'💰',n:'100к',d:'Доход 100 000 ₽'},{id:'money200',i:'👑',n:'Легенда 200',d:'Цель 200 000 ₽!'}];
 const METRICS=[{id:'responses',l:'Откликов',c:'sand'},{id:'calls',l:'Созвонов',c:'sea'},{id:'sales',l:'Продаж',c:'sea'},{id:'lm',l:'Скачали ЛМ',c:'sand'}];
@@ -427,73 +461,97 @@ const ROMAN_CTX=`Ты партнёр по креативному мышлени�
 Продукты: мини-группа 12000₽ (8 тренировок), инд. ведение 32000₽. Цель: 200000₽/мес.
 ГОЛОС: без духовных клише, конкретно, с иронией, «я сам через это прошёл», короткие предложения.
 НЕ льсти. НЕ говори «отличная мысль». Работай по делу. Если идея слабая — скажи прямо.`;
-const SESS_SYS=ROMAN_CTX+`\n\nТы ведёшь "Сессию разбора" — помогаешь Роману превратить хаос в голове в готовый контент.\nПРАВИЛА:\n1. Задавай ОДИН короткий вопрос за раз.\n2. Цепляйся за конкретные детали из его слов.\n3. После 4-6 обменов предложи 3 идеи контента.\n4. Формат идей: строка начинается с "→", затем платформа и первое предложение.\n5. Не давай советов пока не спросят.\nНачни с одного открытого вопроса про то что сейчас у него в голове.`;
+const SESS_SYS=ROMAN_CTX+`\n\nТы ведёшь "Сессию разбора" — помогаешь Роману превратить хаос в голове в готовый контент.\nПРАВИЛА:\n1. Задавай ОДИН короткий вопрос за раз.\n2. Цепляйся за конкретные детали из его слов.\n3. После 4-6 обменов предложи 3 идеи контента. Каждая строка начинается с "→".\n4. Не давай советов пока не спросят.\nНачни с одного открытого вопроса про то что сейчас у него в голове.`;
 
 let S=null,curMode='auto',lastOut='',lastIn='',pendingContentText=null;
 let sessHistory=[],isRecording=false,recognition=null;
 
-function defaultState(){return{xp:0,streak:0,lastDate:null,days:[],tasks:{},money:90000,refls:[],metrics:{responses:0,calls:0,sales:0,lm:0},badges:[],curDay:1,ch:[]};}
+function defaultState(){return{xp:0,streak:0,lastDate:null,days:[],tasks:{},money:90000,refls:[],metrics:{responses:0,calls:0,sales:0,lm:0},badges:[],curDay:1,ch:[],sessions:[]};}
 
+// STORAGE
 async function loadState(){
   try{const res=await window.storage.get(STORAGE_KEY);S=res&&res.value?JSON.parse(res.value):defaultState();}catch(e){S=defaultState();}
-  try{
-    const su=gSU();
-    const resp=await fetch(su+'?t='+Date.now());
-    const data=await resp.json();
-    if(data.found&&data.state){const remote=JSON.parse(data.state);if(!S||(remote.xp||0)>=(S.xp||0)){S=remote;try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}}}
-  }catch(e){}
+  try{const resp=await fetch(SU+'?t='+Date.now());const data=await resp.json();
+    if(data.found&&data.state){const remote=JSON.parse(data.state);if((remote.xp||0)>=(S.xp||0)){S=remote;try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}}}}catch(e){}
 }
-
 async function saveState(){
   try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}
-  try{await fetch(gSU(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'sync',state:JSON.stringify(S)})});}catch(e){}
+  try{await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'sync',state:JSON.stringify(S)})});}catch(e){}
+}
+
+// API KEY — сохраняем в Sheets чтобы не пропадал в Safari
+function gKey(){try{return localStorage.getItem('ry_ak')||'';}catch(e){return'';}}
+
+async function loadApiKey(){
+  // Пробуем localStorage
+  try{const k=localStorage.getItem('ry_ak');if(k)return k;}catch(e){}
+  // Тянем из Sheets
+  try{
+    const resp=await fetch(SU+'?type=get_settings&t='+Date.now());
+    const data=await resp.json();
+    if(data.found&&data.settings&&data.settings.api_key){
+      try{localStorage.setItem('ry_ak',data.settings.api_key);}catch(e){}
+      return data.settings.api_key;
+    }
+  }catch(e){}
+  return '';
+}
+
+function saveKey(){
+  const k=document.getElementById('akInp').value.trim();if(!k)return;
+  try{localStorage.setItem('ry_ak',k);}catch(e){}
+  // Сохраняем в Sheets
+  fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'save_settings',key:'api_key',value:k})}).catch(()=>{});
+  document.getElementById('akSt').textContent='✓ Ключ сохранён в Sheets';
+  document.getElementById('akSt').style.color='var(--sea)';
+  toast('✓ API ключ сохранён','Хранится в Google Sheets','');
+}
+
+async function testKey(){
+  const k=document.getElementById('akInp').value.trim();if(!k){toast('Введи ключ','','');return;}
+  document.getElementById('akSt').textContent='Проверяю...';
+  try{await callAI(k,[{role:'user',content:'hi'}],5);document.getElementById('akSt').textContent='✓ Работает!';document.getElementById('akSt').style.color='var(--sea)';toast('✓ Ключ работает','','');}
+  catch(e){document.getElementById('akSt').textContent='✗ '+e.message;document.getElementById('akSt').style.color='#e74c3c';}
 }
 
 async function callAI(apiKey,messages,maxTokens,systemPrompt){
   const body={apiKey,model:'claude-sonnet-4-20250514',max_tokens:maxTokens||1000,messages};
   if(systemPrompt)body.system=systemPrompt;
   const resp=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const data=await resp.json();
-  if(data.error)throw new Error(data.error.message);
+  const data=await resp.json();if(data.error)throw new Error(data.error.message);
   return data.content?.[0]?.text||'';
 }
 
-function gKey(){try{return localStorage.getItem('ry_ak')||'';}catch(e){return'';}}
-function gSU(){try{return localStorage.getItem('ry_su')||SU_DEF;}catch(e){return SU_DEF;}}
-
+// NAV
 function gp(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
   window.scrollTo(0,0);
-  if(id==='content'&&pendingContentText){document.getElementById('cInp').value=pendingContentText;setMode('content');pendingContentText=null;toast('✍️ Инсайт загружен','Выбран режим Контент','');}
+  if(id==='content'&&pendingContentText){document.getElementById('cInp').value=pendingContentText;setMode('content');pendingContentText=null;toast('✍️ Контекст загружен','','');}
 }
 
+// RENDER
 function render(){rRank();rPath();rToday();rWeek();rMetrics();rBadges();rRefls();rModes();rCH();rSessHistory();uMoney();uGCal();
-  const k=gKey();if(k){try{document.getElementById('akInp').value=k;}catch(e){}document.getElementById('akSt').textContent='✓ Ключ сохранён';document.getElementById('akSt').style.color='var(--sea)';}
-  try{document.getElementById('suInp').value=gSU();}catch(e){}
+  try{document.getElementById('suDisplay').textContent=SU;}catch(e){}
 }
-
 function gRI(xp){let i=0;RANKS.forEach((r,j)=>{if(xp>=r.xr)i=j;});return i;}
 function gR(xp){return RANKS[gRI(xp)];}
-
 function rRank(){
   const r=gR(S.xp),i=gRI(S.xp);
   document.getElementById('rName').textContent=r.n;document.getElementById('rOrb').textContent=r.i;
   document.getElementById('tXP').textContent=S.xp;document.getElementById('dN').textContent=S.days.length;document.getElementById('stN').textContent=S.streak;
-  const inR=S.xp-r.xr,toN=r.xn?r.xn-r.xr:1,pct=r.xn?Math.min(100,(inR/toN)*100):100;
+  const pct=r.xn?Math.min(100,((S.xp-r.xr)/(r.xn-r.xr))*100):100;
   document.getElementById('xpB').style.width=pct+'%';document.getElementById('xpL').textContent=S.xp+' XP';
   if(r.xn&&RANKS[i+1])document.getElementById('xpR').textContent='→ '+(r.xn-S.xp)+' до '+RANKS[i+1].n;
   else document.getElementById('xpR').textContent='⭐ Максимум';
 }
 function rankToast(){const r=gR(S.xp);toast(r.i+' '+r.n,'XP: '+S.xp+' · Серия: '+S.streak,'Дней: '+S.days.length);}
-
 function rPath(){
   const ri=gRI(S.xp),el=document.getElementById('pNodes');el.innerHTML='';
   RANKS.forEach((r,i)=>{const n=document.createElement('div');n.className='pn '+(i<ri?'done':i===ri?'current':'locked');n.innerHTML='<div class="pd">'+r.i+'</div><div class="pname">'+r.n+'</div>';el.appendChild(n);});
 }
-
 function rToday(){
   const today=new Date();document.getElementById('tdDt').textContent=today.toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'});
   const d=S.curDay,plan=PLAN[Math.min(d-1,PLAN.length-1)];document.getElementById('tdF').textContent=plan.f;
@@ -503,7 +561,6 @@ function rToday(){
     el.addEventListener('click',()=>togTask(d,i,t.xp));list.appendChild(el);});
   const cl=S.days.includes(d);document.getElementById('cdBtn').disabled=cl;document.getElementById('cdBtn').textContent=cl?'✓ День закрыт':'⚡ Закрыть день';
 }
-
 function rWeek(){
   const el=document.getElementById('wkG');el.innerHTML='';const days=['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
   const today=new Date(),ws=new Date(today);ws.setDate(today.getDate()-((today.getDay()+6)%7));
@@ -511,19 +568,15 @@ function rWeek(){
     const pi=S.curDay-1+i-((today.getDay()+6)%7);const plan=PLAN[Math.max(0,Math.min(pi,PLAN.length-1))];
     const isR=plan?.l.includes('Выходной');const isDone=S.days.includes(pi+1);
     const el2=document.createElement('div');let cls='wd';if(isDone)cls+=' done';else if(isT)cls+=' today';else if(isR)cls+=' rest';
-    el2.className=cls;el2.innerHTML='<div class="wd-d">'+days[i]+'</div><div class="wd-i">'+(isDone?'✓':isR?'🌿':isT?'⚡':'○')+'</div><div class="wd-n">'+d.getDate()+'</div>';
-    el.appendChild(el2);}
+    el2.className=cls;el2.innerHTML='<div class="wd-d">'+days[i]+'</div><div class="wd-i">'+(isDone?'✓':isR?'🌿':isT?'⚡':'○')+'</div><div class="wd-n">'+d.getDate()+'</div>';el.appendChild(el2);}
 }
-
 function rMetrics(){
   const el=document.getElementById('metG');el.innerHTML='';
   METRICS.forEach(m=>{const v=S.metrics[m.id]||0;const d=document.createElement('div');d.className='met';
     const inp=document.createElement('input');inp.type='number';inp.className='mi';inp.value=v;inp.min='0';inp.addEventListener('change',()=>updMet(m.id,inp.value));
     d.innerHTML='<div class="mv '+m.c+'" id="mv_'+m.id+'">'+v+'</div><div class="ml">'+m.l+'</div>';d.appendChild(inp);el.appendChild(d);});
 }
-
 function rBadges(){const el=document.getElementById('bdgW');el.innerHTML='';BADGES.forEach(b=>{const u=S.badges.includes(b.id);const d=document.createElement('div');d.className='bdg '+(u?'unlocked':'locked');d.title=b.d;d.textContent=b.i+' '+b.n;el.appendChild(d);});}
-
 function rRefls(){
   const el=document.getElementById('reList');el.innerHTML='';
   [...S.refls].reverse().slice(0,8).forEach(r=>{
@@ -536,9 +589,7 @@ function rRefls(){
       const btn=document.createElement('button');btn.className='re-goto';btn.innerHTML='✍️ Создать контент из этого →';const txt=r.insights;btn.addEventListener('click',()=>gotoContent(txt));d.appendChild(btn);}
     el.appendChild(d);});
 }
-
 function rModes(){const el=document.getElementById('modeG');el.innerHTML='';MODES.forEach(m=>{const d=document.createElement('div');d.className='mode-c'+(curMode===m.id?' active':'');d.innerHTML='<div class="mc-icon">'+m.i+'</div><div class="mc-name">'+m.n+'</div><div class="mc-desc">'+m.d+'</div>';d.addEventListener('click',()=>setMode(m.id));el.appendChild(d);});}
-
 function rCH(){
   const el=document.getElementById('chList'),emp=document.getElementById('chEmpty');el.innerHTML='';
   if(!S.ch||!S.ch.length){emp.style.display='block';return;}emp.style.display='none';
@@ -547,22 +598,30 @@ function rCH(){
     const ouTx=document.createElement('div');ouTx.className='ci-ou';ouTx.textContent=h.output.substring(0,250)+(h.output.length>250?'...':'');d.appendChild(ouTx);
     const cp=document.createElement('div');cp.className='ci-cp';cp.textContent='📋 Копировать';cp.addEventListener('click',()=>cpTxt(h.output));d.appendChild(cp);el.appendChild(d);});
 }
-
+function rSessHistory(){
+  const el=document.getElementById('sessHistoryList');if(!el)return;el.innerHTML='';
+  if(!S.sessions||!S.sessions.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);font-style:italic;padding:6px 0">История появится после первой сессии</div>';return;}
+  [...S.sessions].reverse().slice(0,10).forEach(s=>{
+    const d=document.createElement('div');d.className='sess-hist-item';
+    d.innerHTML='<div class="sess-hist-hd"><div class="sess-hist-dt">'+s.date+'</div><div class="sess-hist-toggle">▼</div></div><div class="sess-hist-preview">'+s.preview+'</div>';
+    const detail=document.createElement('div');detail.className='sess-hist-detail';detail.style.display='none';
+    (s.history||[]).forEach(m=>{const md=document.createElement('div');md.className='sess-hist-msg '+(m.role==='user'?'user':'ai');md.innerHTML='<b>'+(m.role==='user'?'Роман':'Клод')+':</b> '+escH(m.content);detail.appendChild(md);});
+    d.appendChild(detail);
+    d.querySelector('.sess-hist-hd').addEventListener('click',()=>{const open=detail.style.display==='block';detail.style.display=open?'none':'block';d.querySelector('.sess-hist-toggle').textContent=open?'▼':'▲';});
+    el.appendChild(d);});
+}
 function uMoney(){const m=S.money||90000,t=200000;document.getElementById('mDisp').textContent=m.toLocaleString('ru-RU')+' ₽';document.getElementById('mBar').style.width=Math.min(100,(m/t)*100)+'%';document.getElementById('mLeft').textContent='Осталось: '+Math.max(0,t-m).toLocaleString('ru-RU')+' ₽';}
-
 function uGCal(){
   const d=S.curDay,plan=PLAN[Math.min(d-1,PLAN.length-1)];const now=new Date(),s=new Date(now),e=new Date(now);s.setHours(9,0,0,0);e.setHours(11,0,0,0);
   const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
   document.getElementById('gcBtn').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Жизнь йога — '+plan.l)+'&dates='+fmt(s)+'/'+fmt(e)+'&details='+encodeURIComponent(plan.t.map(t=>'• '+t.tx).join('\n'));
 }
-
 async function togTask(day,idx,xpVal){
   const key='d'+day;if(!S.tasks[key])S.tasks[key]=[];const i=S.tasks[key].indexOf(idx);
   if(i===-1){S.tasks[key].push(idx);S.xp+=xpVal;toast('Задача выполнена','','+'+xpVal+' XP');}
   else{S.tasks[key].splice(i,1);S.xp=Math.max(0,S.xp-xpVal);}
   await saveState();render();chkBdg();
 }
-
 async function closeDay(){
   const d=S.curDay;if(S.days.includes(d))return;const key='d'+d,plan=PLAN[d-1];if(!S.tasks[key])S.tasks[key]=[];
   plan.t.forEach((t,i)=>{if(!S.tasks[key].includes(i)){S.tasks[key].push(i);S.xp+=t.xp;}});S.days.push(d);
@@ -570,46 +629,35 @@ async function closeDay(){
   if(S.lastDate===yest)S.streak++;else if(S.lastDate!==tod)S.streak=1;S.lastDate=tod;S.xp+=20;if(d<PLAN.length)S.curDay=d+1;
   await saveState();chkBdg();render();toast('⚔️ День '+d+' закрыт!','Ранг: '+gR(S.xp).n+' · Серия: '+S.streak,'+20 XP · Итого: '+S.xp);
 }
-
 async function addMoney(){const v=parseInt(document.getElementById('mInp').value);if(!v||v<=0)return;S.money=(S.money||90000)+v;document.getElementById('mInp').value='';await saveState();uMoney();chkBdg();toast('💰 Доход обновлён','','+'+v.toLocaleString('ru-RU')+' ₽');}
 async function updMet(id,val){S.metrics[id]=parseInt(val)||0;const el=document.getElementById('mv_'+id);if(el)el.textContent=S.metrics[id];await saveState();}
-
 async function sendRefl(){
   const text=document.getElementById('rInp').value.trim();if(!text){toast('Напиши рефлексию','','');return;}
   const btn=document.getElementById('rBtn');btn.innerHTML='<span class="sp"></span> Отправляю...';btn.disabled=true;
   let aiReply='',insights='';const key=gKey();
-  if(key){try{const prompt=ROMAN_CTX+'\n\nРоман написал вечернюю рефлексию (День '+S.curDay+'):\n"'+text+'"\n\nОтветь в двух частях разделённых |||:\nЧАСТЬ 1 (3-4 предложения): Живой ответ как партнёр.\nЧАСТЬ 2: 2-3 момента для контента.\nФормат: [ответ] ||| [инсайты]';
-    const full=await callAI(key,[{role:'user',content:prompt}],700);const parts=full.split('|||');aiReply=(parts[0]||'').trim();insights=(parts[1]||'').trim();}catch(e){aiReply='Ошибка: '+e.message;}}
+  if(key){try{const full=await callAI(key,[{role:'user',content:ROMAN_CTX+'\n\nРефлексия День '+S.curDay+':\n"'+text+'"\n\nОтветь: [ответ партнёра 3-4 предл.] ||| [2-3 контент-инсайта]'}],700);const parts=full.split('|||');aiReply=(parts[0]||'').trim();insights=(parts[1]||'').trim();}catch(e){aiReply='Ошибка: '+e.message;}}
   else{aiReply='API ключ не настроен.';}
   const entry={date:new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),day:S.curDay,text,aiReply,insights};
   S.refls.push(entry);S.xp+=10;await saveState();document.getElementById('rInp').value='';
   sendSheets('reflection',{date:entry.date,day:S.curDay,text,aiReply,contentInsights:insights});
   btn.innerHTML='✦ СОХРАНИТЬ + ОТВЕТ ИИ';btn.disabled=false;render();chkBdg();toast('📜 Рефлексия сохранена','','+10 XP');
 }
-
 async function sendReflNoAI(){const text=document.getElementById('rInp').value.trim();if(!text)return;S.refls.push({date:new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),day:S.curDay,text,aiReply:'',insights:''});S.xp+=5;await saveState();document.getElementById('rInp').value='';render();toast('📜 Сохранено','','+5 XP');}
-
 function setMode(id){curMode=id;const m=MODES.find(x=>x.id===id);document.getElementById('aModeLbl').textContent=m?m.n:'Авто';document.getElementById('shutterLabel').textContent=m?m.n.toUpperCase():'АВТО';
   const hints={razgon:'Пиши как думаешь — поток, обрывки.',ugly:'Одна идея → 7 разных углов.',content:'Укажи формат: пост TG / скрипт Reels / YouTube.',protivokhod:'Где ты неправ? Что думает аудитория иначе?',distil:'Дай сырую мысль — получишь 5 хуков.',svyazka:'Несколько мыслей → одна идея.'};
   document.getElementById('modeHint').textContent=hints[id]||'Пиши как думаешь.';rModes();}
-
 function resetMode(){curMode='auto';document.getElementById('aModeLbl').textContent='Авто';document.getElementById('shutterLabel').textContent='АВТО';document.getElementById('modeHint').textContent='ИИ сам выберет лучший подход.';rModes();}
-
 function toggleShutter(){const body=document.getElementById('shutterBody'),icon=document.getElementById('shutterIcon');const open=body.style.display==='none'||body.style.display==='';body.style.display=open?'block':'none';icon.style.transform=open?'rotate(180deg)':'rotate(0deg)';}
-
 function gotoContent(text){pendingContentText=text;gp('content');}
-
 async function generate(){
   const input=document.getElementById('cInp').value.trim();if(!input){toast('Напиши что-нибудь','','');return;}
   const key=gKey();if(!key){toast('Нет API ключа','Добавь в Настройках','');gp('settings');return;}
   const btn=document.getElementById('genBtn');btn.innerHTML='<span class="sp"></span> Генерирую...';btn.disabled=true;
-  const mps={razgon:'РЕЖИМ РАЗГОН: Суть в 1-2 предложениях. Один провокационный вопрос. В конце предложи: «Углы / Противоход / Дистилляция / Контент?»',ugly:'РЕЖИМ УГЛЫ: 7 углов: Боль / Страх / Парадокс / Личная история / Разоблачение / Результат / Принадлежность.',content:'РЕЖИМ КОНТЕНТ: Пост TG 150-300 слов. Скрипт Reels: Хук→Проблема→Мясо→Призыв.',protivokhod:'РЕЖИМ ПРОТИВОХОД: Где он неправ. Слепое пятно аудитории. 2-3 угла.',distil:'РЕЖИМ ДИСТИЛЛЯЦИЯ: 5 вариантов крючка. Коротко.',svyazka:'РЕЖИМ СВЯЗКА: Стержень. Одна идея.'};
-  const modePrompt=curMode==='auto'?'Выбери лучший режим (РАЗГОН/УГЛЫ/КОНТЕНТ/ПРОТИВОХОД/ДИСТИЛЛЯЦИЯ/СВЯЗКА) и выполни его.':(mps[curMode]||mps.razgon);
+  const mps={razgon:'РЕЖИМ РАЗГОН: Суть в 1-2 предложениях. Один провокационный вопрос. Предложи: «Углы / Противоход / Дистилляция / Контент?»',ugly:'РЕЖИМ УГЛЫ: 7 углов: Боль/Страх/Парадокс/Личная история/Разоблачение/Результат/Принадлежность.',content:'РЕЖИМ КОНТЕНТ: Пост TG 150-300 слов. Скрипт Reels: Хук→Проблема→Мясо→Призыв.',protivokhod:'РЕЖИМ ПРОТИВОХОД: Где он неправ. Слепое пятно аудитории. 2-3 угла.',distil:'РЕЖИМ ДИСТИЛЛЯЦИЯ: 5 вариантов крючка. Коротко.',svyazka:'РЕЖИМ СВЯЗКА: Стержень. Одна идея.'};
+  const modePrompt=curMode==='auto'?'Выбери лучший режим и выполни.':(mps[curMode]||mps.razgon);
   try{lastOut=await callAI(key,[{role:'user',content:ROMAN_CTX+'\n\n'+modePrompt+'\n\nВВОД:\n"'+input+'"'}],900);lastIn=input;}catch(e){lastOut='Ошибка: '+e.message;}
-  document.getElementById('outTx').textContent=lastOut;document.getElementById('cOut').classList.add('vis');
-  btn.innerHTML='⚡ Генерировать';btn.disabled=false;
+  document.getElementById('outTx').textContent=lastOut;document.getElementById('cOut').classList.add('vis');btn.innerHTML='⚡ Генерировать';btn.disabled=false;
 }
-
 function copyOut(){cpTxt(lastOut);}
 async function saveToHist(){
   if(!lastOut)return;const m=MODES.find(x=>x.id===curMode);
@@ -620,133 +668,104 @@ async function saveToHist(){
 }
 function clearC(){document.getElementById('cInp').value='';document.getElementById('cOut').classList.remove('vis');lastOut='';lastIn='';}
 
-// ─── SESSION ──────────────────────────────────────────────────────────────────
+// SESSION
 async function sessStart(){
   const key=gKey();if(!key){toast('Нет API ключа','Добавь в Настройках','');gp('settings');return;}
   sessHistory=[];
-  document.getElementById('sessMsgs').innerHTML='';
-  document.getElementById('sessIdeas').style.display='none';
-  document.getElementById('sessIdeasList').innerHTML='';
-  document.getElementById('sessInput').value='';
-  document.getElementById('sessStartBtn').style.display='none';
-  document.getElementById('sessChat').classList.add('active');
-  document.getElementById('sessResetBtn').style.display='block';
-  addSessMsg('ai','...',true);
-
-  // Собираем контекст текущего дня
-  const d=S.curDay;
-  const plan=PLAN[Math.min(d-1,PLAN.length-1)];
-  const key2='d'+d;const doneTasks=S.tasks[key2]||[];
+  document.getElementById('sessMsgs').innerHTML='';document.getElementById('sessIdeas').style.display='none';
+  document.getElementById('sessIdeasList').innerHTML='';document.getElementById('sessInput').value='';
+  document.getElementById('sessStartBtn').style.display='none';document.getElementById('sessChat').classList.add('active');document.getElementById('sessResetBtn').style.display='block';
+  const d=S.curDay,plan=PLAN[Math.min(d-1,PLAN.length-1)];const key2='d'+d;const doneTasks=S.tasks[key2]||[];
   const taskLines=plan.t.map((t,i)=>'  '+(doneTasks.includes(i)?'✓':'○')+' '+t.tx).join('\n');
-  const wfTxt='Неделя 1 из 14 — Опубликовать оба оффера с ценой. Провести 3–5 созвонов.';
-  const ctxBlock=`\n\n=== ТЕКУЩИЙ КОНТЕКСТ РОМАНА ===
-День: ${d} из 14
-Фокус дня: ${plan.f}
-Фокус недели: ${wfTxt}
-Прогресс: ${S.xp} XP, серия ${S.streak} дней, закрыто ${S.days.length} дней
-Метрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}
-Задачи дня:\n${taskLines}
-Деньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽ цели
-=== КОНЕЦ КОНТЕКСТА ===
-
-Используй этот контекст чтобы направлять Романа в сторону решения конкретных задач дня и недели. Если он говорит про контент — помогай создать то что двигает именно сегодняшние задачи. Если задача дня — публикация оффера, направляй к контенту про оффер. Если созвоны — к контенту который приводит людей на созвон.`;
-
-  const sessWithCtx=SESS_SYS+ctxBlock;
-
-  try{
-    const reply=await callAI(key,[{role:'user',content:'Начни сессию'}],400,sessWithCtx);
-    updateTyping(reply);sessHistory.push({role:'assistant',content:reply});
-    // Сохраняем промпт с контекстом для этой сессии
-    sessHistory._sys=sessWithCtx;
-  }catch(e){updateTyping('Ошибка: '+e.message);}
+  const ctxBlock=`\n\n=== КОНТЕКСТ ===\nДень: ${d} из 14\nФокус дня: ${plan.f}\nЗадачи:\n${taskLines}\nXP: ${S.xp}, серия: ${S.streak} дней\nМетрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}\nДеньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽\n=== КОНЕЦ ===\nНаправляй к контенту который двигает задачи дня.`;
+  const sysWithCtx=SESS_SYS+ctxBlock;
+  addSessMsg('ai','...',true);
+  try{const reply=await callAI(key,[{role:'user',content:'Начни сессию'}],400,sysWithCtx);updateTyping(reply);sessHistory.push({role:'assistant',content:reply});sessHistory._sys=sysWithCtx;}
+  catch(e){updateTyping('Ошибка: '+e.message);}
 }
-
 async function sessSendMsg(){
   const ta=document.getElementById('sessInput');const text=ta.value.trim();if(!text)return;
   const key=gKey();if(!key)return;
-  ta.value='';ta.style.height='auto';
-  addSessMsg('user',text);sessHistory.push({role:'user',content:text});
-  document.getElementById('sessSend').disabled=true;
-  addSessMsg('ai','...',true);
-  try{
-    const msgs=[{role:'user',content:'Начни сессию'},...sessHistory];
-    const reply=await callAI(key,msgs,500,SESS_SYS);
-    updateTyping(reply);sessHistory.push({role:'assistant',content:reply});
-    if(reply.includes('→'))parseIdeas(reply);
-  }catch(e){updateTyping('Ошибка: '+e.message);}
+  ta.value='';addSessMsg('user',text);sessHistory.push({role:'user',content:text});
+  document.getElementById('sessSend').disabled=true;addSessMsg('ai','...',true);
+  try{const msgs=[{role:'user',content:'Начни сессию'},...sessHistory];const sys=sessHistory._sys||SESS_SYS;
+    const reply=await callAI(key,msgs,600,sys);updateTyping(reply);sessHistory.push({role:'assistant',content:reply});sessHistory._sys=sys;
+    if(reply.includes('→'))parseIdeas(reply);}
+  catch(e){updateTyping('Ошибка: '+e.message);}
   document.getElementById('sessSend').disabled=false;
 }
-
 function sessKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sessSendMsg();}}
-
 function sessReset(){
-  sessHistory=[];
-  document.getElementById('sessMsgs').innerHTML='';
-  document.getElementById('sessIdeas').style.display='none';
-  document.getElementById('sessChat').classList.remove('active');
-  document.getElementById('sessStartBtn').style.display='block';
-  document.getElementById('sessResetBtn').style.display='none';
-  if(isRecording)stopMic();
+  if(sessHistory.length>2)saveSessionToHistory();
+  sessHistory=[];document.getElementById('sessMsgs').innerHTML='';document.getElementById('sessIdeas').style.display='none';
+  document.getElementById('sessChat').classList.remove('active');document.getElementById('sessStartBtn').style.display='block';document.getElementById('sessResetBtn').style.display='none';
+  if(isRecording)stopMic();rSessHistory();
 }
-
 function addSessMsg(role,text,isTyping){
   const el=document.createElement('div');el.className='msg '+role;if(isTyping)el.id='typing-msg';
-  el.innerHTML='<div class="msg-lbl">'+(role==='ai'?'Клод':'Роман')+'</div>'+(isTyping?'<span class="sp"></span>':escH(text));
-  document.getElementById('sessMsgs').appendChild(el);
-  document.getElementById('sessMsgs').scrollTop=document.getElementById('sessMsgs').scrollHeight;
+  const lbl=document.createElement('div');lbl.className='msg-lbl';lbl.textContent=role==='ai'?'Клод':'Роман';el.appendChild(lbl);
+  if(isTyping){const sp=document.createElement('span');sp.className='sp';el.appendChild(sp);}
+  else{const tx=document.createElement('div');tx.innerHTML=escH(text);el.appendChild(tx);
+    if(role==='user'){const cp=document.createElement('div');cp.className='msg-copy';cp.textContent='📋';cp.addEventListener('click',e=>{e.stopPropagation();cpTxt(text);});el.appendChild(cp);}}
+  document.getElementById('sessMsgs').appendChild(el);document.getElementById('sessMsgs').scrollTop=document.getElementById('sessMsgs').scrollHeight;
 }
-
-function updateTyping(text){const el=document.getElementById('typing-msg');if(el){el.id='';el.innerHTML='<div class="msg-lbl">Клод</div>'+escH(text);document.getElementById('sessMsgs').scrollTop=document.getElementById('sessMsgs').scrollHeight;}}
+function updateTyping(text){const el=document.getElementById('typing-msg');if(el){el.id='';el.innerHTML='';const lbl=document.createElement('div');lbl.className='msg-lbl';lbl.textContent='Клод';el.appendChild(lbl);const tx=document.createElement('div');tx.innerHTML=escH(text);el.appendChild(tx);document.getElementById('sessMsgs').scrollTop=document.getElementById('sessMsgs').scrollHeight;}}
 function escH(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
-
 function parseIdeas(text){
   const lines=text.split('\n').filter(l=>l.trim().startsWith('→'));if(!lines.length)return;
   const list=document.getElementById('sessIdeasList');list.innerHTML='';
+  const sessContext=sessHistory.filter(m=>m.role==='user').map(m=>m.content).join('\n\n');
   lines.forEach(line=>{const idea=line.replace(/^→\s*/,'').trim();const el=document.createElement('div');el.className='idea-item';
-    el.innerHTML=idea+'<div class="idea-item-hint">Нажми чтобы открыть в генераторе →</div>';
-    el.addEventListener('click',()=>{gotoContent(idea);toast('✍️ Идея загружена','Контент-лаборатория','');});list.appendChild(el);});
+    el.innerHTML=idea+'<div class="idea-item-hint">Нажми → откроется в генераторе с полным контекстом</div>';
+    el.addEventListener('click',()=>{const fullCtx='КОНТЕКСТ СЕССИИ:\n\n'+sessContext+'\n\n---\nИДЕЯ:\n'+idea+'\n\nРазверни в готовый контент используя контекст выше.';gotoContent(fullCtx);toast('✍️ Контекст передан','','');});list.appendChild(el);});
   const box=document.getElementById('sessIdeas');box.style.display='block';box.scrollIntoView({behavior:'smooth'});
+  saveSessionToHistory();saveSessionToSheets();
 }
-
+function saveSessionToHistory(){
+  if(!sessHistory.length)return;
+  const date=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  const userMsgs=sessHistory.filter(m=>m.role==='user').map(m=>m.content).join(' / ');
+  const entry={date,preview:userMsgs.substring(0,80)+(userMsgs.length>80?'...':''),history:[...sessHistory].map(m=>({role:m.role,content:m.content}))};
+  if(!S.sessions)S.sessions=[];S.sessions.push(entry);if(S.sessions.length>20)S.sessions=S.sessions.slice(-20);
+  saveState();rSessHistory();
+}
+async function saveSessionToSheets(){
+  const date=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  const dialogue=sessHistory.filter(m=>m.role!=='system').map(m=>(m.role==='user'?'РОМАН: ':'КЛОД: ')+m.content).join('\n\n');
+  const ideas=document.getElementById('sessIdeasList').innerText;
+  try{await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'session',date,dialogue,ideas})});}catch(e){}
+}
 function toggleMic(){if(isRecording)stopMic();else startMic();}
 function startMic(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){toast('Голос не поддерживается','Используй текст','');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('Голос не поддерживается','Используй текст','');return;}
   recognition=new SR();recognition.lang='ru-RU';recognition.continuous=true;recognition.interimResults=true;
   recognition.onresult=e=>{let final='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)final+=e.results[i][0].transcript;}
-    if(final){const ta=document.getElementById('sessInput');ta.value+=(ta.value?' ':'')+final;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,100)+'px';}};
+    if(final){const ta=document.getElementById('sessInput');ta.value+=(ta.value?' ':'')+final;}};
   recognition.onerror=()=>stopMic();recognition.onend=()=>{if(isRecording)recognition.start();};recognition.start();
   isRecording=true;document.getElementById('sessMic').classList.add('recording');
 }
 function stopMic(){if(recognition){recognition.stop();recognition=null;}isRecording=false;document.getElementById('sessMic').classList.remove('recording');}
 
-// ─── SETTINGS ─────────────────────────────────────────────────────────────────
-function saveKey(){const k=document.getElementById('akInp').value.trim();if(!k)return;try{localStorage.setItem('ry_ak',k);}catch(e){}document.getElementById('akSt').textContent='✓ Ключ сохранён';document.getElementById('akSt').style.color='var(--sea)';toast('✓ API ключ сохранён','','');}
-async function testKey(){
-  const k=document.getElementById('akInp').value.trim();if(!k){toast('Введи ключ','','');return;}document.getElementById('akSt').textContent='Проверяю...';
-  try{await callAI(k,[{role:'user',content:'hi'}],5);document.getElementById('akSt').textContent='✓ Работает!';document.getElementById('akSt').style.color='var(--sea)';toast('✓ Ключ работает','','');}
-  catch(e){document.getElementById('akSt').textContent='✗ '+e.message;document.getElementById('akSt').style.color='#e74c3c';}
-}
-function saveSU(){const u=document.getElementById('suInp').value.trim();if(!u)return;try{localStorage.setItem('ry_su',u);}catch(e){}toast('✓ URL сохранён','','');}
 async function resetAll(){if(!confirm('Сбросить весь прогресс?'))return;S=defaultState();await saveState();render();toast('Сброс выполнен','','');}
-
 async function chkBdg(){
   let ch=false;const ck={first_post:()=>S.days.includes(1),first_call:()=>S.metrics.calls>0,streak3:()=>S.streak>=3,streak7:()=>S.streak>=7,week1:()=>S.days.length>=7,week2:()=>S.days.length>=14,money100:()=>(S.money||0)>=100000,money200:()=>(S.money||0)>=200000};
   BADGES.forEach(b=>{if(S.badges.includes(b.id))return;if(ck[b.id]&&ck[b.id]()){S.badges.push(b.id);S.xp+=50;ch=true;setTimeout(()=>toast('🏆 '+b.i+' '+b.n,b.d,'+50 XP'),400);}});
   if(ch){await saveState();rBadges();rRank();}
 }
-
 function cpTxt(text){if(!text)return;navigator.clipboard.writeText(text).then(()=>toast('📋 Скопировано','','')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 Скопировано','','');});}
-
 let tTimer;
 function toast(title,body,xp){clearTimeout(tTimer);document.getElementById('tT').textContent=title;document.getElementById('tB').textContent=body;document.getElementById('tX').textContent=xp;const t=document.getElementById('toast');t.classList.add('show');tTimer=setTimeout(()=>t.classList.remove('show'),3000);}
+async function sendSheets(type,data){try{await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,...data})});}catch(e){}}
 
-async function sendSheets(type,data){try{await fetch(gSU(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,...data})});}catch(e){}}
-
-function dov(e){e.preventDefault();}function dlv(){}function ddr(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)pf(f);}function ldf(e){const f=e.target.files[0];if(f)pf(f);}
-function pf(f){const r=new FileReader();r.onload=async e=>{S.xp+=10;await saveState();rRank();toast('📄 '+f.name,'','+10 XP');};r.readAsText(f);}
-
-(async()=>{await loadState();document.getElementById('loadScreen').style.display='none';render();})();
+(async()=>{
+  await loadState();
+  // Загружаем API ключ — из localStorage или из Sheets
+  let k=gKey();
+  if(!k)k=await loadApiKey();
+  if(k){try{document.getElementById('akInp').value=k;}catch(e){}document.getElementById('akSt').textContent='✓ Ключ сохранён';document.getElementById('akSt').style.color='var(--sea)';}
+  document.getElementById('loadScreen').style.display='none';
+  render();
+})();
 </script>
 </body>
 </html>
