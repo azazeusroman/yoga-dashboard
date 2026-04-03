@@ -361,7 +361,7 @@ async function callAI(apiKey, messages, maxTokens) {
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'roman_yoga_v1';
-const SU_DEF = 'https://script.google.com/macros/s/AKfycbxzlavPivb6ON3O9aUG4FPAAF4w2E4ndC5bmdW0RCAwt34t9ZQqrtHlidPQOU6pR37_/exec';
+const SU_DEF = 'https://script.google.com/macros/s/AKfycbyr5GPyFYIIKprsm77ByMuHDZzF2Ngbu0x3DQJNhLCaF1r8aGoVwlKV6lBGdQY4PTr3/exec';
 const RANKS = [
   {n:'Скиталец',i:'🚶',xr:0,xn:100},{n:'Пехотинец',i:'🛡️',xr:100,xn:250},
   {n:'Воин',i:'⚔️',xr:250,xn:500},{n:'Искатель',i:'🔍',xr:500,xn:800},
@@ -461,14 +461,45 @@ function defaultState() {
 }
 
 async function loadState() {
+  // 1. Сначала грузим локально (быстро)
   try {
     const res = await window.storage.get(STORAGE_KEY);
-    S = res && res.value ? JSON.parse(res.value) : defaultState();
+    if (res && res.value) S = JSON.parse(res.value);
+    else S = defaultState();
   } catch(e) { S = defaultState(); }
+
+  // 2. Тянем из Sheets (синхронизация между устройствами)
+  try {
+    const su = gSU();
+    const resp = await fetch(su + '?t=' + Date.now());
+    const data = await resp.json();
+    if (data.found && data.state) {
+      const remote = JSON.parse(data.state);
+      // Берём версию с большим XP (более свежая)
+      if (!S || (remote.xp || 0) >= (S.xp || 0)) {
+        S = remote;
+        // Сохраняем локально
+        try { await window.storage.set(STORAGE_KEY, JSON.stringify(S)); } catch(e) {}
+      }
+    }
+  } catch(e) {
+    // Если Sheets недоступны — работаем с локальными данными
+    console.log('Sheets sync failed, using local:', e.message);
+  }
 }
 
 async function saveState() {
+  // Сохраняем локально
   try { await window.storage.set(STORAGE_KEY, JSON.stringify(S)); } catch(e) {}
+  // Сохраняем в Sheets (синхронизация)
+  try {
+    await fetch(gSU(), {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({type: 'sync', state: JSON.stringify(S)})
+    });
+  } catch(e) {}
 }
 
 function gKey() { try { return localStorage.getItem('ry_ak') || ''; } catch(e) { return ''; } }
