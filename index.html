@@ -263,6 +263,12 @@ textarea.inp{resize:none;line-height:1.6}
 <div class="page" id="page-content">
   <div class="page-title">Контент-лаборатория</div>
   <div class="page-sub">Превращаем хаотичные мысли в готовый контент</div>
+
+  <button class="sess-btn" onclick="openSession()">
+    <span style="font-size:20px">🎙️</span>
+    <span>СЕССИЯ РАЗБОРА</span>
+    <span style="font-size:12px;opacity:.6">наговори — получи идеи</span>
+  </button>
   <div class="shutter-wrap">
     <div class="shutter-toggle" onclick="toggleShutter()">
       <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase">⚙️ Режим генерации</span>
@@ -337,22 +343,43 @@ textarea.inp{resize:none;line-height:1.6}
   </div>
 </div>
 
+<div class="sess-overlay" id="sessOverlay">
+  <div class="sess-hdr">
+    <div class="sess-title">🎙️ Сессия разбора</div>
+    <div class="sess-close" onclick="closeSession()">✕</div>
+  </div>
+  <div class="sess-msgs" id="sessMsgs"></div>
+  <div class="sess-ideas" id="sessIdeas" style="display:none;margin:0 16px 10px">
+    <div class="sess-ideas-lbl">✦ Идеи контента</div>
+    <div id="sessIdeasList"></div>
+  </div>
+  <div class="sess-foot">
+    <div class="sess-input-row">
+      <textarea class="sess-ta" id="sessInput" rows="1" placeholder="Пиши или говори..." onkeydown="sessKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="sess-mic" id="sessMic" onclick="toggleMic()">🎤</button>
+      <button class="sess-send" id="sessSend" onclick="sessSendMsg()">→</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><div class="tt" id="tT"></div><div class="tb" id="tB"></div><div class="tx" id="tX"></div></div>
 
 <script>
 // ─── PROXY ────────────────────────────────────────────────────────────────────
 const PROXY = 'https://magenta-capybara-179f49.netlify.app/.netlify/functions/claude';
 
-async function callAI(apiKey, messages, maxTokens) {
+async function callAI(apiKey, messages, maxTokens, systemPrompt) {
+  const body = {
+    apiKey,
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: maxTokens || 1000,
+    messages
+  };
+  if (systemPrompt) body.system = systemPrompt;
   const resp = await fetch(PROXY, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      apiKey,
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTokens || 1000,
-      messages
-    })
+    body: JSON.stringify(body)
   });
   const data = await resp.json();
   if (data.error) throw new Error(data.error.message);
