@@ -632,9 +632,32 @@ async function sessStart(){
   document.getElementById('sessChat').classList.add('active');
   document.getElementById('sessResetBtn').style.display='block';
   addSessMsg('ai','...',true);
+
+  // Собираем контекст текущего дня
+  const d=S.curDay;
+  const plan=PLAN[Math.min(d-1,PLAN.length-1)];
+  const key2='d'+d;const doneTasks=S.tasks[key2]||[];
+  const taskLines=plan.t.map((t,i)=>'  '+(doneTasks.includes(i)?'✓':'○')+' '+t.tx).join('\n');
+  const wfTxt='Неделя 1 из 14 — Опубликовать оба оффера с ценой. Провести 3–5 созвонов.';
+  const ctxBlock=`\n\n=== ТЕКУЩИЙ КОНТЕКСТ РОМАНА ===
+День: ${d} из 14
+Фокус дня: ${plan.f}
+Фокус недели: ${wfTxt}
+Прогресс: ${S.xp} XP, серия ${S.streak} дней, закрыто ${S.days.length} дней
+Метрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}
+Задачи дня:\n${taskLines}
+Деньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽ цели
+=== КОНЕЦ КОНТЕКСТА ===
+
+Используй этот контекст чтобы направлять Романа в сторону решения конкретных задач дня и недели. Если он говорит про контент — помогай создать то что двигает именно сегодняшние задачи. Если задача дня — публикация оффера, направляй к контенту про оффер. Если созвоны — к контенту который приводит людей на созвон.`;
+
+  const sessWithCtx=SESS_SYS+ctxBlock;
+
   try{
-    const reply=await callAI(key,[{role:'user',content:'Начни сессию'}],300,SESS_SYS);
+    const reply=await callAI(key,[{role:'user',content:'Начни сессию'}],400,sessWithCtx);
     updateTyping(reply);sessHistory.push({role:'assistant',content:reply});
+    // Сохраняем промпт с контекстом для этой сессии
+    sessHistory._sys=sessWithCtx;
   }catch(e){updateTyping('Ошибка: '+e.message);}
 }
 
