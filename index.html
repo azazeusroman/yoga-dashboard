@@ -168,7 +168,17 @@ textarea.inp{resize:none;line-height:1.6}
 .ci-in{font-size:12px;color:var(--text3);margin-bottom:5px;font-style:italic}
 .ci-ou{font-size:13px;color:var(--text2);line-height:1.5}
 .ci-cp{font-size:10px;padding:3px 8px;background:var(--glass2);border:1px solid var(--b1);border-radius:20px;color:var(--mist);cursor:pointer;font-family:'JetBrains Mono',monospace;margin-top:7px;display:inline-block}
-/* SESSION PAGE */
+.sess-hist-item{background:rgba(7,22,27,.62);border:1px solid var(--b1);border-radius:var(--r2);margin-bottom:7px;overflow:hidden;transition:border-color .2s}
+.sess-hist-item:hover{border-color:var(--b2)}
+.sess-hist-hd{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;cursor:pointer}
+.sess-hist-dt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3)}
+.sess-hist-toggle{font-size:11px;color:var(--text3)}
+.sess-hist-preview{font-size:12px;color:var(--text2);padding:0 13px 10px;font-style:italic}
+.sess-hist-detail{padding:10px 13px;border-top:1px solid var(--b1);display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto}
+.sess-hist-msg{font-size:12px;line-height:1.5;padding:7px 10px;border-radius:8px}
+.sess-hist-msg.user{background:rgba(233,162,124,0.07);border:1px solid var(--b3);color:var(--text2)}
+.sess-hist-msg.ai{background:rgba(14,137,146,0.06);border:1px solid rgba(14,137,146,.15);color:var(--text2)}
+/* SESS END */
 .sess-hero{background:linear-gradient(135deg,rgba(0,245,255,0.06),rgba(13,49,58,0.9));border:1px solid var(--b2);border-radius:var(--r3);padding:18px;margin-bottom:14px}
 .sess-hero-title{font-family:'Russo One',sans-serif;font-size:22px;letter-spacing:.12em;color:var(--neon);text-shadow:0 0 12px rgba(0,245,255,0.4);margin-bottom:4px}
 .sess-hero-sub{font-size:13px;color:var(--text3);line-height:1.5}
@@ -179,11 +189,14 @@ textarea.inp{resize:none;line-height:1.6}
 .sess-msgs{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:50vh;overflow-y:auto}
 .msg{max-width:88%;padding:11px 14px;border-radius:14px;font-size:14px;line-height:1.6}
 .msg.ai{background:rgba(14,137,146,0.1);border:1px solid rgba(14,137,146,0.2);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
-.msg.user{background:rgba(233,162,124,0.1);border:1px solid var(--b3);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.user{background:rgba(233,162,124,0.1);border:1px solid var(--b3);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px;position:relative}
+.msg-copy{position:absolute;bottom:6px;right:8px;font-size:10px;padding:2px 7px;background:var(--glass2);border:1px solid var(--b1);border-radius:20px;color:var(--text3);cursor:pointer;font-family:'JetBrains Mono',monospace;opacity:0;transition:opacity .2s}
+.msg.user:hover .msg-copy{opacity:1}
+.msg.user .msg-copy{opacity:.4}
 .msg-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;opacity:.5}
 .sess-input-area{border-top:1px solid var(--b1);padding:12px 14px;background:rgba(7,22,27,0.5)}
 .sess-input-row{display:flex;gap:8px;align-items:flex-end}
-.sess-ta{flex:1;background:rgba(7,22,27,.72);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none;line-height:1.5;max-height:100px;transition:border-color .2s}
+.sess-ta{flex:1;background:rgba(7,22,27,.72);border:1px solid var(--b1);border-radius:var(--r2);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none;line-height:1.6;height:90px;max-height:140px;overflow-y:auto;transition:border-color .2s}
 .sess-ta:focus{border-color:var(--sea)}
 .sess-ta::placeholder{color:var(--text3);font-style:italic}
 .sess-mic-btn{width:42px;height:42px;border-radius:50%;background:var(--glass2);border:1px solid var(--b1);color:var(--text3);font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
@@ -362,6 +375,11 @@ textarea.inp{resize:none;line-height:1.6}
     <div id="sessIdeasList"></div>
   </div>
   <button class="sess-reset-btn" id="sessResetBtn" style="display:none" onclick="sessReset()">↺ Новая сессия</button>
+  <div class="gap"></div>
+  <div class="card">
+    <div class="card-title"><div class="ctd"></div>История сессий</div>
+    <div id="sessHistoryList"></div>
+  </div>
 </div>
 
 <!-- SETTINGS -->
@@ -452,7 +470,7 @@ function gp(id){
   if(id==='content'&&pendingContentText){document.getElementById('cInp').value=pendingContentText;setMode('content');pendingContentText=null;toast('✍️ Инсайт загружен','Выбран режим Контент','');}
 }
 
-function render(){rRank();rPath();rToday();rWeek();rMetrics();rBadges();rRefls();rModes();rCH();uMoney();uGCal();
+function render(){rRank();rPath();rToday();rWeek();rMetrics();rBadges();rRefls();rModes();rCH();rSessHistory();uMoney();uGCal();
   const k=gKey();if(k){try{document.getElementById('akInp').value=k;}catch(e){}document.getElementById('akSt').textContent='✓ Ключ сохранён';document.getElementById('akSt').style.color='var(--sea)';}
   try{document.getElementById('suInp').value=gSU();}catch(e){}
 }
