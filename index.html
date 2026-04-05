@@ -581,7 +581,7 @@ textarea.inp{resize:none;line-height:1.6}
 
 <script>
 const PROXY='https://magenta-capybara-179f49.netlify.app/.netlify/functions/claude';
-const SU='https://script.google.com/macros/s/AKfycbxZ81FybvTBoBB7d0LfUbSnsfcBMThk6TVxLBMtkd7cOtuLt1PHNVyk_XtDfe2tFQCH/exec';
+const SU='https://script.google.com/macros/s/AKfycbxbuiQoJ6Xu4zIWlvBDmG8G0Xkm-EHOyU7691pNJ6-kBMyLIJ4IY2N8tMrUP85Y6d8/exec';
 const STORAGE_KEY='roman_yoga_v1';
 
 const RANKS=[{n:'Скиталец',i:'🚶',xr:0,xn:100},{n:'Пехотинец',i:'🛡️',xr:100,xn:250},{n:'Воин',i:'⚔️',xr:250,xn:500},{n:'Искатель',i:'🔍',xr:500,xn:800},{n:'Самурай',i:'🗡️',xr:800,xn:1200},{n:'Знаменосец',i:'🚩',xr:1200,xn:1800},{n:'Сэнсэй',i:'🧘',xr:1800,xn:2600},{n:'Полководец',i:'👑',xr:2600,xn:3600},{n:'Легенда',i:'🌟',xr:3600,xn:null}];
@@ -1108,9 +1108,20 @@ function saveDialogToHistory(type){
   const date=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
   const userMsgs=history.filter(m=>m.role==='user').map(m=>m.content).join(' / ');
   const entry={date,preview:userMsgs.substring(0,80)+(userMsgs.length>80?'...':''),history:[...history].map(m=>({role:m.role,content:m.content})),type:history._type||type};
-  if(type==='sess'){if(!S.sessions)S.sessions=[];S.sessions.push(entry);if(S.sessions.length>20)S.sessions=S.sessions.slice(-20);}
-  else if(type==='plan'){if(!S.planSessions)S.planSessions=[];S.planSessions.push(entry);if(S.planSessions.length>10)S.planSessions=S.planSessions.slice(-10);}
-  else{if(!S.refls)S.refls=[];S.refls.push(entry);if(S.refls.length>30)S.refls=S.refls.slice(-30);}
+  const dialogue=([...history]).filter(m=>m.role!=='system').map(m=>(m.role==='user'?'РОМАН: ':'КЛОД: ')+m.content).join('\n\n');
+
+  if(type==='sess'){
+    if(!S.sessions)S.sessions=[];S.sessions.push(entry);if(S.sessions.length>20)S.sessions=S.sessions.slice(-20);
+    sendSheets('session',{date,dialogue,ideas:''});
+  } else if(type==='plan'){
+    if(!S.planSessions)S.planSessions=[];S.planSessions.push(entry);if(S.planSessions.length>10)S.planSessions=S.planSessions.slice(-10);
+    sendSheets('planning',{date,dialogue,plan:planResultText||''});
+  } else {
+    if(!S.refls)S.refls=[];S.refls.push(entry);if(S.refls.length>30)S.refls=S.refls.slice(-30);
+    const sheetsType=history._type==='urgent'?'urgent':'reflection';
+    sendSheets(sheetsType,{date,dialogue,insights:''});
+  }
+
   saveState();
   if(type==='sess')rSessHistory();else if(type==='plan')rPlanHistory();else rRefls();
 }
