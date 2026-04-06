@@ -519,6 +519,13 @@ textarea.inp{resize:none;line-height:1.6}
     <div class="dial-hero-title sand">📅 Планирование</div>
     <div class="dial-hero-sub">Еженедельная сессия с коучем-стратегом. Итоги прошлой недели → план на следующую → задачи на главный экран.</div>
   </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+    <button class="btn btn-g btn-sm" onclick="document.getElementById('planFileInp').click()">📄 Загрузить план</button>
+    <input type="file" id="planFileInp" style="display:none" accept=".txt,.md,.pdf" onchange="loadPlanFile(event)">
+    <div id="planFileStatus" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)">
+      <span id="planFileMsg"></span>
+    </div>
+  </div>
   <button class="dial-start-btn sand" id="planStartBtn" onclick="planStart()"><span style="font-size:22px">📅</span><span>НАЧАТЬ ПЛАНИРОВАНИЕ</span></button>
   <div class="dial-chat" id="planChat">
     <div class="dial-msgs" id="planMsgs"></div>
@@ -691,14 +698,21 @@ let reflHistory=[],sessHistory=[],planHistory=[];
 let activeRecording=null,recognition=null,isRecording=false;
 let pendingXP={refl:[],plan:[]};
 let planResultText='';
+let basePlanText='';
+let userProfile=''; // живой профиль Романа
 
 function defaultState(){return{xp:0,streak:0,lastDate:null,days:[],tasks:{},money:90000,refls:[],metrics:{responses:0,calls:0,sales:0,lm:0},badges:[],curDay:1,ch:[],sessions:[],planSessions:[]};}
 
 async function loadState(){
   try{const res=await window.storage.get(STORAGE_KEY);S=res&&res.value?JSON.parse(res.value):defaultState();}catch(e){S=defaultState();}
-  if(!S.sessions)S.sessions=[];if(!S.planSessions)S.planSessions=[];
+  if(!S.sessions)S.sessions=[];if(!S.planSessions)S.planSessions=[];if(!S.weekPlan)S.weekPlan=null;
   try{const resp=await fetch(SU+'?t='+Date.now());const data=await resp.json();
-    if(data.found&&data.state){const r=JSON.parse(data.state);if((r.xp||0)>=(S.xp||0)){S=r;if(!S.sessions)S.sessions=[];if(!S.planSessions)S.planSessions=[];try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}}}}catch(e){}
+    if(data.found&&data.state){const r=JSON.parse(data.state);if((r.xp||0)>=(S.xp||0)){S=r;if(!S.sessions)S.sessions=[];if(!S.planSessions)S.planSessions=[];if(!S.weekPlan)S.weekPlan=null;try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}}}}catch(e){}
+  // Загружаем базовый план и профиль параллельно
+  await Promise.all([
+    fetch(SU+'?type=get_base_plan&t='+Date.now()).then(r=>r.json()).then(d=>{if(d.found&&d.plan)basePlanText=d.plan;}).catch(()=>{}),
+    fetch(SU+'?type=get_profile&t='+Date.now()).then(r=>r.json()).then(d=>{if(d.found&&d.profile)userProfile=d.profile;}).catch(()=>{})
+  ]);
 }
 async function saveState(){
   try{await window.storage.set(STORAGE_KEY,JSON.stringify(S));}catch(e){}
@@ -761,12 +775,37 @@ function rPath(){
 }
 function rToday(){
   const today=new Date();document.getElementById('tdDt').textContent=today.toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'});
-  const d=S.curDay,plan=PLAN[Math.min(d-1,PLAN.length-1)];document.getElementById('tdF').textContent=plan.f;
-  const list=document.getElementById('tList');list.innerHTML='';const key='d'+d;if(!S.tasks[key])S.tasks[key]=[];
-  plan.t.forEach((t,i)=>{const done=S.tasks[key].includes(i);const el=document.createElement('div');el.className='task'+(done?' done':'');
-    el.innerHTML='<div class="t-chk">'+(done?'✓':'')+'</div><div class="t-txt">'+t.tx+'</div><div class="t-tag '+t.tp+'">'+(t.tp==='ai'?'ИИ':t.tp==='pub'?'Пост':'Сам')+'</div><div class="t-xp">+'+t.xp+'</div>';
-    el.addEventListener('click',()=>togTask(d,i,t.xp));list.appendChild(el);});
-  const cl=S.days.includes(d);document.getElementById('cdBtn').disabled=cl;document.getElementById('cdBtn').textContent=cl?'✓ День закрыт':'⚡ Закрыть день';
+
+  // Если есть утверждённый weekPlan — используем его
+  const dayOfWeek=today.getDay()||7; // 1=пн, 7=вс
+  let tasks=[];let focusText='';
+  if(S.weekPlan&&S.weekPlan.days){
+    const dayPlan=S.weekPlan.days.find(d=>d.day===dayOfWeek);
+    if(dayPlan){tasks=dayPlan.tasks||[];focusText='Задачи из утверждённого плана недели';}
+  }
+  // Fallback на захардкоженный план
+  if(!tasks.length){
+    const d=S.curDay,plan=PLAN[Math.min(d-1,PLAN.length-1)];
+    tasks=plan.t;focusText=plan.f;
+  }
+
+  document.getElementById('tdF').textContent=focusText;
+  const list=document.getElementById('tList');list.innerHTML='';
+  const key='week_'+dayOfWeek+'_'+today.toISOString().slice(0,10);
+  if(!S.tasks[key])S.tasks[key]=[];
+
+  tasks.forEach((t,i)=>{const done=S.tasks[key].includes(i);const el=document.createElement('div');el.className='task'+(done?' done':'');
+    el.innerHTML='<div class="t-chk">'+(done?'✓':'')+'</div><div class="t-txt">'+t.tx+'</div><div class="t-tag '+(t.tp||'self')+'">'+(t.tp==='ai'?'ИИ':t.tp==='pub'?'Пост':'Сам')+'</div><div class="t-xp">+'+(t.xp||20)+'</div>';
+    el.addEventListener('click',()=>togTaskByKey(key,i,t.xp||20));list.appendChild(el);});
+
+  const cl=S.days.includes(S.curDay);document.getElementById('cdBtn').disabled=cl;document.getElementById('cdBtn').textContent=cl?'✓ День закрыт':'⚡ Закрыть день';
+}
+
+async function togTaskByKey(key,idx,xpVal){
+  if(!S.tasks[key])S.tasks[key]=[];const i=S.tasks[key].indexOf(idx);
+  if(i===-1){S.tasks[key].push(idx);S.xp+=xpVal;toast('Задача выполнена','','+'+xpVal+' XP');}
+  else{S.tasks[key].splice(i,1);S.xp=Math.max(0,S.xp-xpVal);}
+  await saveState();render();chkBdg();
 }
 function rWeek(){
   const el=document.getElementById('wkG');el.innerHTML='';const days=['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
@@ -896,7 +935,76 @@ async function closeDay(){
 async function addMoney(){const v=parseInt(document.getElementById('mInp').value);if(!v||v<=0)return;S.money=(S.money||90000)+v;document.getElementById('mInp').value='';await saveState();uMoney();chkBdg();toast('💰 Доход обновлён','','+'+v.toLocaleString('ru-RU')+' ₽');}
 async function updMet(id,val){S.metrics[id]=parseInt(val)||0;const el=document.getElementById('mv_'+id);if(el)el.textContent=S.metrics[id];await saveState();}
 
-// ── REFLECTION DIALOG ─────────────────────────────────────────────────────────
+// ── GLOBAL CONTEXT ────────────────────────────────────────────────────────────
+function buildGlobalCtx(){
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  const dayOfWeek=now.getDay()||7;
+  const today=now.toISOString().slice(0,10);
+  const taskKey='week_'+dayOfWeek+'_'+today;
+  const doneTasks=S.tasks[taskKey]||[];
+
+  // Задачи дня
+  let todayTasksText='';
+  if(S.weekPlan&&S.weekPlan.days){
+    const dp=S.weekPlan.days.find(d=>d.day===dayOfWeek);
+    if(dp&&dp.tasks){todayTasksText=dp.tasks.map((t,i)=>'  '+(doneTasks.includes(i)?'✓':'○')+' '+t.tx+' ['+((t.tp||'self')==='ai'?'ИИ':(t.tp==='pub'?'Пост':'Сам'))+']').join('\n');}
+  }
+  if(!todayTasksText){
+    const plan=PLAN[Math.min(S.curDay-1,PLAN.length-1)];
+    const dk='d'+S.curDay;const dt=S.tasks[dk]||[];
+    todayTasksText=plan.t.map((t,i)=>'  '+(dt.includes(i)?'✓':'○')+' '+t.tx).join('\n');
+  }
+
+  const profileBlock=userProfile?`\n\n=== ПРОФИЛЬ РОМАНА ===\n${userProfile}\n=== КОНЕЦ ПРОФИЛЯ ===`:'';
+  const planBlock=basePlanText?`\n\n=== БАЗОВЫЙ ПЛАН ===\n${basePlanText}\n=== КОНЕЦ ПЛАНА ===`:'';
+  const weekPlanBlock=(S.weekPlan&&S.weekPlan.days)?`\n\n=== ПЛАН ТЕКУЩЕЙ НЕДЕЛИ ===\n${JSON.stringify(S.weekPlan.days,null,2)}\n=== КОНЕЦ ===`:'';
+
+  return `\n\n=== КОНТЕКСТ ===\nСейчас: ${dateStr}, ${timeStr}\nДень плана: ${S.curDay}\nXP: ${S.xp}, серия: ${S.streak} дней\nДеньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽\nМетрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}\n\nЗадачи сегодня:\n${todayTasksText}\n=== КОНЕЦ ===${profileBlock}${planBlock}${weekPlanBlock}`;
+}
+
+// ── PROFILE SUGGEST & SAVE ────────────────────────────────────────────────────
+async function suggestProfileUpdate(dialogText,type){
+  const key=gKey();if(!key)return;
+  try{
+    const prompt=`Из этого диалога (${type}) извлеки 2-4 факта о Романе которые важно запомнить для будущих сессий.
+Только новое — паттерны поведения, эмоциональные реакции, реальные кейсы, что работает/не работает, инсайты.
+Формат: каждый факт с новой строки, начиная с "• "
+Если ничего нового — ответь "ПУСТО"
+
+ДИАЛОГ:
+${dialogText.substring(0,2000)}`;
+    const suggestion=await callAI(key,[{role:'user',content:prompt}],300);
+    if(suggestion&&!suggestion.includes('ПУСТО')&&suggestion.includes('•')){
+      showProfileSuggest(suggestion);
+    }
+  }catch(e){}
+}
+
+function showProfileSuggest(text){
+  // Показываем блок с предложением добавить в профиль
+  let box=document.getElementById('profileSuggestBox');
+  if(!box){box=document.createElement('div');box.id='profileSuggestBox';box.style.cssText='position:fixed;bottom:70px;left:14px;right:14px;z-index:500;background:rgba(13,49,58,0.97);border:1px solid var(--b2);border-radius:var(--r);padding:14px;box-shadow:0 8px 30px rgba(0,0,0,.6);backdrop-filter:blur(20px)';document.body.appendChild(box);}
+  box.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--neon);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">✦ Добавить в профиль?</div>
+<textarea id="profileSuggestTa" style="width:100%;background:rgba(7,22,27,.8);border:1px solid var(--b2);border-radius:8px;padding:9px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;resize:none;outline:none;line-height:1.6;height:90px">${text}</textarea>
+<div style="display:flex;gap:7px;margin-top:8px">
+  <button onclick="saveProfileSuggest()" style="flex:1;padding:8px;background:linear-gradient(135deg,var(--sea),var(--sea-d));border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer">✓ Сохранить в профиль</button>
+  <button onclick="document.getElementById('profileSuggestBox').remove()" style="padding:8px 12px;background:var(--glass2);border:1px solid var(--b1);border-radius:8px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">✕</button>
+</div>`;
+  box.style.display='block';
+}
+
+async function saveProfileSuggest(){
+  const ta=document.getElementById('profileSuggestTa');if(!ta)return;
+  const newFacts=ta.value.trim();if(!newFacts)return;
+  const date=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});
+  const entry=`\n[${date}]\n${newFacts}`;
+  userProfile=(userProfile||'')+entry;
+  await sendSheets('save_profile',{profile:userProfile});
+  document.getElementById('profileSuggestBox').remove();
+  toast('✓ Профиль обновлён','','');
+}
 function startReflDialog(type){
   reflHistory=[];reflHistory._type=type;
   document.getElementById('reflMsgs').innerHTML='';
@@ -965,6 +1073,24 @@ function sessReset(){
   if(activeRecording==='sess')stopMic();rSessHistory();
 }
 
+function loadPlanFile(e){
+  const f=e.target.files[0];if(!f)return;
+  const msg=document.getElementById('planFileMsg');
+  msg.textContent='Читаю...';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    basePlanText=ev.target.result;
+    // Сохраняем в Sheets как новый базовый план
+    sendSheets('save_base_plan',{plan:basePlanText});
+    msg.textContent='✓ '+f.name+' загружен';
+    msg.style.color='var(--sea)';
+    toast('📄 План загружен','Будет использован в следующей сессии','');
+  };
+  reader.onerror=()=>{msg.textContent='✗ Ошибка чтения';msg.style.color='#e74c3c';};
+  reader.readAsText(f);
+  e.target.value='';
+}
+
 // ── WEEK TASKS VIEW ───────────────────────────────────────────────────────────
 function toggleWeekTasks(){
   const el=document.getElementById('weekTasks');const btn=document.getElementById('weekToggleBtn');
@@ -1008,10 +1134,22 @@ function downloadPlanMD(){
 // ── PLANNING ──────────────────────────────────────────────────────────────────
 async function planStart(){
   const key=gKey();if(!key){toast('Нет API ключа','Добавь в Настройках','');gp('settings');return;}
-  planHistory=[];document.getElementById('planMsgs').innerHTML='';document.getElementById('planResult').classList.remove('vis');
+  planHistory=[];planResultText='';
+  document.getElementById('planMsgs').innerHTML='';document.getElementById('planResult').classList.remove('vis');
   document.getElementById('planXpBox').style.display='none';document.getElementById('planInput').value='';
   document.getElementById('planStartBtn').style.display='none';document.getElementById('planChat').classList.add('active');document.getElementById('planResetBtn').style.display='block';
-  const ctx=`\n\n=== КОНТЕКСТ ===\nТекущий день: ${S.curDay}\nXP: ${S.xp}, серия: ${S.streak} дней, закрыто дней: ${S.days.length}\nДеньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽\nМетрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}\n=== КОНЕЦ ===`;
+
+  // Текущая дата и время
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  const weekDays=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+  const dayOfWeek=weekDays[now.getDay()];
+
+  const basePlanBlock=basePlanText?`\n\n=== БАЗОВЫЙ ДОКУМЕНТ ПЛАНИРОВАНИЯ ===\n${basePlanText}\n=== КОНЕЦ ДОКУМЕНТА ===`:'';
+
+  const ctx=`\n\n=== КОНТЕКСТ ===\nСейчас: ${dateStr}, ${timeStr} (${dayOfWeek})\nТекущий день плана: ${S.curDay}\nXP: ${S.xp}, серия: ${S.streak} дней, закрыто дней: ${S.days.length}\nДеньги: ${(S.money||0).toLocaleString('ru-RU')} ₽ из 200 000 ₽\nМетрики: откликов ${S.metrics.responses||0}, созвонов ${S.metrics.calls||0}, продаж ${S.metrics.sales||0}\n=== КОНЕЦ ===${basePlanBlock}`;
+
   const sys=PLAN_SYS+ctx;planHistory._sys=sys;
   addDialMsg('planMsgs','ai','...',true);
   try{const reply=await callAI(key,[{role:'user',content:'Начни сессию планирования'}],500,sys);updateTyping('planMsgs',reply);planHistory.push({role:'assistant',content:reply});parseXP(reply,'plan');}
@@ -1032,11 +1170,50 @@ async function planSendMsg(){
 }
 async function approvePlan(){
   if(!planResultText)return;
-  S.xp+=30;await saveState();chkBdg();render();
-  saveDialogToHistory('plan');
-  sendSheets('planning',{date:new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short'}),plan:planResultText});
-  toast('✅ План утверждён!','Задачи обновлены','+30 XP');
+  const key=gKey();
+  const btn=document.querySelector('.plan-result-acts .btn-s');
+  if(btn){btn.innerHTML='<span class="sp"></span> Применяю...';btn.disabled=true;}
+
+  // Сохраняем базовый план в Sheets
+  sendSheets('save_base_plan',{plan:planResultText});
+
+  // AI-конвертация плана в задачи дня
+  if(key){
+    try{
+      const prompt=`Из этого текста плана недели извлеки задачи и верни ТОЛЬКО JSON массив без пояснений.
+Формат каждого объекта: {"day": 1, "tasks": [{"tx": "текст задачи", "xp": 30, "tp": "self"}]}
+day — номер дня недели (1=пн, 2=вт, ... 7=вс)
+tp — "self" (сам делать), "ai" (делегировать ИИ), "pub" (публикация)
+xp — от 10 до 60 в зависимости от важности
+
+ПЛАН:
+${planResultText}`;
+      const json=await callAI(key,[{role:'user',content:prompt}],800);
+      const clean=json.replace(/```json|```/g,'').trim();
+      const days=JSON.parse(clean);
+      // Сохраняем в weekPlan
+      S.weekPlan={approved:new Date().toISOString(),days};
+      toast('✅ План утверждён!','Задачи применены на главный экран','+30 XP');
+    }catch(e){
+      toast('✅ План утверждён!','Задачи обновятся вручную','');
+    }
+  }
+
+  S.xp+=30;
+  // Фикс истории — сохраняем сессию
+  if(planHistory.length>1){
+    const date=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    const userMsgs=planHistory.filter(m=>m.role==='user').map(m=>m.content).join(' / ');
+    const entry={date,preview:userMsgs.substring(0,80)+(userMsgs.length>80?'...':''),history:[...planHistory].map(m=>({role:m.role,content:m.content}))};
+    if(!S.planSessions)S.planSessions=[];S.planSessions.push(entry);if(S.planSessions.length>10)S.planSessions=S.planSessions.slice(-10);
+  }
+
+  await saveState();chkBdg();render();
+  const dialogue=planHistory.filter(m=>m.role!=='system').map(m=>(m.role==='user'?'РОМАН: ':'КЛОД: ')+m.content).join('\n\n');
+  sendSheets('planning',{date:new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'short'}),dialogue,plan:planResultText});
   document.getElementById('planResult').classList.remove('vis');
+  if(btn){btn.innerHTML='✓ Утвердить план';btn.disabled=false;}
+  rPlanHistory();
 }
 function copyPlan(){cpTxt(planResultText);}
 function planReset(){
